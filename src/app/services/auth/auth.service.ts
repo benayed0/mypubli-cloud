@@ -33,7 +33,7 @@ export class AuthService {
       issuer: 'https://accounts.google.com',
 
       // URL of the SPA to redirect the user to after login
-      redirectUri: 'http://localhost:4200/login',
+      redirectUri: window.location.origin + '/login',
 
       // The SPA's id. The SPA is registerd with this id at the auth-server
       // clientId: 'server.code',
