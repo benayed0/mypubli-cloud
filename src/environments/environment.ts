@@ -6,5 +6,6 @@ export const environment = {
   GOOGLE_CLIENT_SECRET:
     process.env['GOOGLE_CLIENT_SECRET'] ||
     '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',
-  API_URL: 'http://localhost:3000/',
+  API_URL:
+    'http://mypublic-cloud-api-env.eba-pbyem4jr.eu-central-1.elasticbeanstalk.com/',
 };
