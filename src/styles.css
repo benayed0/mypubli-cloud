@@ -1,1 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
+/* Base styles */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Light theme styles */
+.light-theme {
+  --primary-color: #673ab7; /* Purple */
+  --accent-color: #4caf50; /* Green */
+  --background-color: #ffffff; /* White */
+  --text-color: #000000; /* Black */
+}
+
+/* Dark theme styles */
+.dark-theme {
+  --primary-color: #7c4dff; /* Lighter Purple */
+  --background-color: #121212; /* Dark background */
+  --text-color: #ffffff; /* White text */
+}
+
+/* Apply the variables */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: var(--accent-color);
+}
+p {
+  color: white;
+}

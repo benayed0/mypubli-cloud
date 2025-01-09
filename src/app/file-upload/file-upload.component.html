@@ -1,0 +1,133 @@
+<div style="width: 100%; display: flex; justify-content: center">
+  <div class="parent">
+    <div class="file-parent">
+      <div style="width: 45%">
+        <p>Rapport</p>
+        <label
+          for="report"
+          class="drop-container"
+          [class.disabled]="sendingReport"
+          [class.drag-over]="isDragOverReport"
+          (dragover)="onDragOverReport($event)"
+          (dragleave)="onDragLeaveReport($event)"
+          (drop)="onDropReport($event)"
+        >
+          @if(!report ){
+
+          <span class="drop-title">Déposez votre Document</span>
+          <span class="or"> ou</span>
+          <span class="file-info">
+            <span class="custom-file-label">
+              Ajouter votre Document
+            </span></span
+          >
+          <span class="file-format">formats acceptés : <b> .pdf .docx</b></span>
+
+          }@else {
+          <span class="file-info">
+            <span class="custom-file-label">
+              {{ report.name }}
+            </span>
+            <button
+              class="delete-button"
+              (click)="clearReport($event)"
+              aria-label="Supprimer les fichiers"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+          }
+
+          <input
+            type="file"
+            id="report"
+            accept=".doc,.docx, application/pdf"
+            (change)="onReportFileSelected($event)"
+            required
+            #ReportFileInput
+            hidden
+          />
+        </label>
+      </div>
+      <div style="width: 45%">
+        <p>Résultats Scientifiques</p>
+        <label
+          for="scientific_doc"
+          class="drop-container"
+          [class.disabled]="sendingScientificDoc"
+          [class.drag-over]="isDragOverScientificDoc"
+          (dragover)="onDragOverScientificDoc($event)"
+          (dragleave)="onDragLeaveScientificDoc($event)"
+          (drop)="onDropScientificDoc($event)"
+        >
+          @if(!scientific_doc){
+
+          <span class="drop-title">Déposez votre document</span>
+          <span class="or"> ou</span>
+          <span class="file-info">
+            <span class="custom-file-label"> Ajouter votre document</span></span
+          >
+          <span class="file-format"
+            >formats acceptés : <b>.pdf .docx .xlsx</b></span
+          >
+
+          }@else {
+
+          <span class="file-info">
+            <span class="custom-file-label">
+              {{ scientific_doc.name }}
+            </span>
+            <button
+              class="delete-button"
+              (click)="clearScientificDoc($event)"
+              aria-label="Supprimer les fichiers"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+          }
+
+          <input
+            type="file"
+            id="scientific_doc"
+            accept=".doc,.docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/pdf"
+            (change)="onScientificDocFileSelected($event)"
+            required
+            #ScientificFileInput
+            hidden
+          />
+        </label>
+      </div>
+    </div>
+    @if(sendingReport){
+    <div class="progress-bar">
+      <span>En cours d'envoi du <b>Rapport</b></span>
+      <mat-progress-bar
+        mode="indeterminate"
+        [value]="reportProgressBar"
+      ></mat-progress-bar>
+    </div>
+    } @if(sendingScientificDoc){
+    <div class="progress-bar">
+      <span>En cours d'envoi du <b>Document scientifique</b></span>
+
+      <mat-progress-bar
+        mode="indeterminate"
+        [value]="scientifDocProgressBar"
+      ></mat-progress-bar>
+    </div>
+    }
+    <button
+      (click)="sendFiles()"
+      mat-flat-button
+      color="primary"
+      class="button"
+      [ngClass]="{
+        disabled:
+          !report || !scientific_doc || sendingReport || sendingScientificDoc
+      }"
+    >
+      Envoyer
+    </button>
+  </div>
+</div>
