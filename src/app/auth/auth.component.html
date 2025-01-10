@@ -3,6 +3,12 @@
     <h2></h2>
   </div>
   <div class="google-button">
+    @if(loaderService.isLoading$|async){
+    <div class="container-spinner">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+    </div>
+    }@else {
+
     <button class="gsi-material-button" (click)="oAuthLogin()">
       <div class="gsi-material-button-state"></div>
       <div class="gsi-material-button-content-wrapper">
@@ -33,10 +39,12 @@
             <path fill="none" d="M0 0h48v48H0z"></path>
           </svg>
         </div>
-        <span class="gsi-material-button-contents"
-          >Se connecter avec Google</span
-        >
+
+        <span class="gsi-material-button-contents">
+          Se connecter avec Google
+        </span>
       </div>
     </button>
+    }
   </div>
 </div>

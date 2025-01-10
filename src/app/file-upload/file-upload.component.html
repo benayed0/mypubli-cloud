@@ -1,7 +1,7 @@
 <div style="width: 100%; display: flex; justify-content: center">
   <div class="parent">
     <div class="file-parent">
-      <div style="width: 45%">
+      <div class="file-container">
         <p>Rapport</p>
         <label
           for="report"
@@ -49,7 +49,7 @@
           />
         </label>
       </div>
-      <div style="width: 45%">
+      <div class="file-container">
         <p>Résultats Scientifiques</p>
         <label
           for="scientific_doc"
@@ -60,18 +60,19 @@
           (dragleave)="onDragLeaveScientificDoc($event)"
           (drop)="onDropScientificDoc($event)"
         >
-          @if(!scientific_doc){
+          @if(scientific_docs.length===0){
 
-          <span class="drop-title">Déposez votre document</span>
+          <span class="drop-title">Déposez vos documents</span>
           <span class="or"> ou</span>
           <span class="file-info">
-            <span class="custom-file-label"> Ajouter votre document</span></span
+            <span class="custom-file-label"> Ajouter vos documents</span></span
           >
           <span class="file-format"
             >formats acceptés : <b>.pdf .docx .xlsx</b></span
           >
 
-          }@else {
+          }@else {@for(scientific_doc of scientific_docs;track
+          scientific_doc.name;let idx = $index){
 
           <span class="file-info">
             <span class="custom-file-label">
@@ -79,9 +80,22 @@
             </span>
             <button
               class="delete-button"
-              (click)="clearScientificDoc($event)"
+              (click)="clearScientificDoc($event, idx)"
               aria-label="Supprimer les fichiers"
             >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </span>
+          }
+
+          <span class="file-info" style="flex-direction: column">
+            <span class="custom-file-label"> Ajouter un document </span>
+            <button
+              mat-flat-button
+              color="warn"
+              (click)="clearAllScientificDocs($event)"
+            >
+              Tout supprimer
               <mat-icon>delete</mat-icon>
             </button>
           </span>
@@ -124,10 +138,21 @@
       class="button"
       [ngClass]="{
         disabled:
-          !report || !scientific_doc || sendingReport || sendingScientificDoc
+          !report ||
+          scientific_docs.length === 0 ||
+          sendingReport ||
+          sendingScientificDoc
       }"
     >
       Envoyer
     </button>
+    @if(showErrors){ @if(!report&& scientific_docs.length===0){
+    <span class="mat-error">Aucun document n'est renseigné </span>
+    }@else if(!report){
+
+    <span class="mat-error">Le <b>Rapport</b> est manquant.</span>
+    }@else if(scientific_docs.length===0){
+    <span class="mat-error">Le <b>Document scientifique</b> est manquant.</span>
+    } }
   </div>
 </div>

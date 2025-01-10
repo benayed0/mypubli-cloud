@@ -11,8 +11,13 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { Article } from '../../articles/articles.component';
 
 export interface uploadFileUrlRequest {
-  report: { name: string; type: string };
-  scientific_doc: { name: string; type: string };
+  report: { name: string };
+  scientific_doc: string[];
+}
+
+export interface uploadScientificDocFileUrlRequest {
+  name: string;
+  article_id: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -52,15 +57,23 @@ export class ArticleService {
   getUploadFileUrls(files: uploadFileUrlRequest) {
     return this.httpClient.post<{
       reportUrl: string;
-      scientificdocUrl: string;
+      scientificdocUrls: { name: string; url: string; id: string }[];
       article_id: string;
       createdAt: string;
     }>(`${environment.API_URL}article/get_files_upload_url`, files);
   }
-  getDownloadUrl(article_id: string, filename: string) {
+  getScientificDocUploadUrl(file: uploadScientificDocFileUrlRequest) {
+    return this.httpClient.post<{
+      url: string;
+      id: string;
+    }>(`${environment.API_URL}article/get_scientific_doc_upload_url`, file);
+  }
+  getDownloadUrl(article_id: string, filename: string, id?: string) {
     return this.httpClient.get<{
       url: string;
-    }>(`${environment.API_URL}article/get_file/${article_id}/${filename}`);
+    }>(
+      `${environment.API_URL}article/get_file/${article_id}/${filename}?id=${id}`
+    );
   }
   getByUser() {
     return this.httpClient.get<Article[]>(

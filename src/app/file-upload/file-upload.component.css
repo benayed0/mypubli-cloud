@@ -141,3 +141,18 @@ p {
 mat-progress-bar {
   margin-top: 10px;
 }
+.file-container {
+  width: 45%;
+}
+@media (max-width: 768px) {
+  .file-parent {
+    flex-direction: column; /* Stack containers vertically on mobile */
+  }
+
+  .file-container {
+    width: 100%; /* Full width in mobile */
+  }
+}
+.mat-error {
+  color: #ba1a1a;
+}

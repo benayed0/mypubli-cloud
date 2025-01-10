@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
 import { Article, ArticlesComponent } from '../articles/articles.component';
 import { ArticleService } from '../services/article/article.service';
@@ -10,19 +10,18 @@ import { ArticleService } from '../services/article/article.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {
-  constructor(private articleService: ArticleService) {
-    this.getArticles();
-  }
+export class HomeComponent implements OnInit {
+  constructor(private articleService: ArticleService) {}
   addFiles(article: Article) {
     console.log(article);
     this.articles = [...this.articles, article];
   }
   articles: Article[] = [];
+  ngOnInit(): void {
+    this.getArticles();
+  }
   getArticles() {
     this.articleService.getByUser().subscribe((articles) => {
-      console.log(articles);
-
       this.articles = articles;
     });
   }

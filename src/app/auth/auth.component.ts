@@ -1,19 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  PLATFORM_ID,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { isPlatformBrowser } from '@angular/common';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user.interface';
+import { LoaderService } from '../services/loader/loader.service';
+import { AsyncPipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [MatDialogModule],
+  imports: [AsyncPipe, MatProgressSpinnerModule],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,11 +18,10 @@ export class AuthComponent {
   constructor(
     private authService: AuthService,
     private oauthService: OAuthService,
-    private dialog: MatDialog,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
+    public loaderService: LoaderService,
+    private router: Router
   ) {
-    if (isPlatformBrowser(platformId)) {
+    if (window !== undefined) {
       this.authService.initConfig();
       oauthService.events.subscribe((e) => {
         if (e.type === 'token_received') {

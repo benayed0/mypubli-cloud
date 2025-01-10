@@ -35,7 +35,7 @@ h3 {
   display: flex;
   align-items: center;
   max-width: 100%;
-  gap: 8px;
+  gap: 5px;
   user-select: none;
 }
 
@@ -44,14 +44,30 @@ h3 {
   overflow: hidden !important; /* Hide overflow content */
   text-overflow: ellipsis !important; /* Add ellipsis for overflow text */
   white-space: nowrap !important; /* Prevent wrapping */
-  background-color: #222245;
+  background-color: #5d5d87;
   color: #fff;
+  font: 14px Roboto, sans-serif;
   padding: 8px 12px;
   border-radius: 4px;
-  cursor: pointer;
   transition: background-color 0.2s ease;
   white-space: nowrap; /* Prevents text from wrapping to the next line */
   overflow: hidden; /* Hides overflowing content */
   text-overflow: ellipsis; /* Adds "..." for overflowing text */
   max-width: 100%; /* Ensures the label does not exceed the parent width */
+}
+::ng-deep .mat-mdc-form-field-subscript-wrapper,
+.mat-mdc-form-field-bottom-align::before {
+  display: none;
+}
+
+.delete-button {
+  background: #222245;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  border-radius: 10%;
 }

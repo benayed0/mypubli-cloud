@@ -30,7 +30,7 @@ import { Article } from '../articles/articles.component';
 export class FileUploadComponent {
   constructor(
     private toast: HotToastService,
-    private article: ArticleService
+    private articleService: ArticleService
   ) {}
   @ViewChild('ScientificFileInput')
   ScientificFileInput!: ElementRef<HTMLInputElement>;
@@ -56,12 +56,12 @@ export class FileUploadComponent {
   isDragOverReport = false;
   sendingReport = false;
   //Scientific doc file upload
-  scientific_doc: File | undefined;
-  scientific_docName: string | undefined;
+  scientific_docs: { file: File; name: string }[] = [];
   isDragOverScientificDoc = false;
   sendingScientificDoc = false;
   reportProgressBar: number = 0;
   scientifDocProgressBar: number = 0;
+  showErrors = false;
   onDragOverReport(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -78,8 +78,12 @@ export class FileUploadComponent {
     event.preventDefault();
     event.stopPropagation();
     this.isDragOverReport = false;
-
+    if (this.report) {
+      this.toast.error('Un seul rapport est autorisé');
+      return;
+    }
     const file = event.dataTransfer?.files[0];
+
     this.handleFileReport(file!);
   }
 
@@ -95,6 +99,8 @@ export class FileUploadComponent {
     if (this.reportFileTypes.includes(file.type)) {
       this.report = file;
       this.reportName = file.name;
+    } else {
+      this.toast.error("Le format du fichier n'est pas autorisé");
     }
 
     // Add your file processing logic here
@@ -133,45 +139,62 @@ export class FileUploadComponent {
     console.log('ScientificDocFileSelected');
 
     const input = event.target as HTMLInputElement;
-    const file = input.files![0];
-    console.log(file);
-
-    this.handleFileScientificDoc(file);
+    if (input.files && input.files.length > 0) {
+      Array.from(input.files).forEach((file) => {
+        this.handleFileScientificDoc(file);
+      });
+    }
   }
 
   handleFileScientificDoc(file: File): void {
     if (this.scientificDocFileTypes.includes(file.type)) {
-      this.scientific_doc = file;
-      this.scientific_docName = file.name;
+      this.scientific_docs?.push({ file, name: file.name });
+    } else {
+      this.toast.error("Le format du fichier n'est pas autorisé");
     }
 
     // Add your file processing logic here
   }
-  clearScientificDoc(event?: Event) {
-    this.scientific_doc = undefined;
-    this.scientific_docName = undefined;
+  clearScientificDoc(event: Event, index: number) {
+    if (index >= 0 && index < this.scientific_docs!.length) {
+      this.scientific_docs!.splice(index, 1); // Remove the file from the files array
+    }
+
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+  clearAllScientificDocs(event?: Event) {
+    this.scientific_docs = [];
+
     if (event) {
       event.preventDefault();
       event.stopPropagation();
     }
   }
   sendFiles() {
-    if (this.report && this.scientific_doc) {
+    this.showErrors = true;
+    if (this.report && this.scientific_docs) {
+      const scientificDocs = this.scientific_docs.map((doc) => ({
+        name: doc.name,
+        id: '',
+      }));
       const files = {
-        report: { name: this.report.name, type: this.report.type },
-        scientific_doc: {
-          name: this.scientific_doc.name,
-          type: this.scientific_doc.type,
-        },
+        report: { name: this.report.name },
+        scientific_doc: scientificDocs.map((doc) => doc.name),
       };
-      this.article
+
+      this.articleService
         .getUploadFileUrls(files)
-        .subscribe(({ reportUrl, scientificdocUrl, article_id, createdAt }) => {
+        .subscribe(({ reportUrl, article_id, createdAt }) => {
+          this.showErrors = false;
+
           const reportLoadingToast = this.toast.loading(
             'Envoi du rapport en cours...',
             { duration: 60000 }
           );
-          this.article.uploadFile(reportUrl, this.report!).subscribe({
+          this.articleService.uploadFile(reportUrl, this.report!).subscribe({
             next: (progress) => {
               this.sendingReport = true;
               this.reportProgressBar = progress;
@@ -192,48 +215,66 @@ export class FileUploadComponent {
                 'Envoi du document scientifique en cours...',
                 { duration: 60000 }
               );
-              this.article
-                .uploadFile(scientificdocUrl, this.scientific_doc!)
-                .subscribe({
-                  next: (progress) => {
-                    this.sendingReport = false;
-                    this.sendingScientificDoc = true;
-                    this.scientifDocProgressBar = progress;
-                  },
+              for (const i in this.scientific_docs) {
+                const { name, file } = this.scientific_docs[i];
 
-                  error: (error) => {
-                    console.log(error);
-                    this.scientifDocProgressBar = 0;
-                    this.toast.error(
-                      `Une erreur est survenue lors de l'envoi du document scientifique !`
-                    );
-                  },
-                  complete: () => {
-                    this.sendingScientificDoc = false;
-                    scientificDocLoadingToast.close();
-                    this.toast.success('Fichiers envoyés avec succès !');
-                    this.addFiles.emit({
-                      article_id,
-                      createdAt,
-                      report_name: this.reportName!,
-                      scientificDoc_name: this.scientific_docName!,
-                      state: 'processing',
+                if (!file) {
+                  this.toast.error(
+                    `Une erreur est survenue lors de l'envoi du document scientifique !`
+                  );
+                  return;
+                }
+                this.articleService
+                  .getScientificDocUploadUrl({ name, article_id })
+                  .subscribe(({ url, id }) => {
+                    this.articleService.uploadFile(url, file).subscribe({
+                      next: (progress) => {
+                        this.sendingReport = false;
+                        this.sendingScientificDoc = true;
+                        this.scientifDocProgressBar = progress;
+                      },
+
+                      error: (error) => {
+                        console.log(error);
+                        this.scientifDocProgressBar = 0;
+                        this.toast.error(
+                          `Une erreur est survenue lors de l'envoi du document scientifique !`
+                        );
+                      },
+                      complete: () => {
+                        scientificDocs[i]['id'] = id;
+                        scientificDocLoadingToast.close();
+                        this.sendingScientificDoc = false;
+                      },
                     });
-                    this.clearReport();
-                    this.clearScientificDoc();
-                  },
-                });
+                  });
+              }
+
+              this.toast.success(
+                `${
+                  this.scientific_docs.length + 2
+                } fichiers envoyés avec succès !`
+              );
+              this.addFiles.emit({
+                article_id,
+                createdAt,
+                report_name: this.reportName!,
+                scientificDocs,
+                state: 'uploaded',
+              });
+              this.clearReport();
+              this.clearAllScientificDocs();
             },
           });
         });
     } else {
-      if (!this.report && !this.scientific_doc)
+      if (!this.report && !this.scientific_docs)
         this.toast.error(
-          'Merci de rajouter le Raport et le document scientifique'
+          'Merci de rajouter le rapport et au moins un document scientifique'
         );
-      else if (!this.report) this.toast.error('Merci de rajouter le Raport');
-      else if (!this.scientific_doc)
-        this.toast.error('Merci de rajouter le document scientifique');
+      else if (!this.report) this.toast.error('Merci de rajouter le Rapport');
+      else if (!this.scientific_docs)
+        this.toast.error('Merci de rajouter au moins un document scientifique');
     }
   }
 }
