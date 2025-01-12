@@ -27,9 +27,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     finalize(() => {
-      setTimeout(() => {
-        loaderService.hideLoadingSpinner(); // Hide loading spinner UI element
-      }, 2000);
+      loaderService.hideLoadingSpinner(); // Hide loading spinner UI element
     })
   );
 };
