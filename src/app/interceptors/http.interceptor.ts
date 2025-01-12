@@ -15,8 +15,8 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   const backendCall = req.url.includes(environment.API_URL);
   const loaderService = inject(LoaderService);
 
+  loaderService.showLoadingSpinner();
   if (token && backendCall) {
-    loaderService.showLoadingSpinner();
     req = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
