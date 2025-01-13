@@ -7,6 +7,7 @@ import { LandingComponent } from './landing/landing.component';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent, canActivate: [publicGuard] },
-  { path: '', component: LandingComponent },
+  // { path: '', component: LandingComponent, canActivate: [publicGuard] },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  { path: '**', redirectTo: 'login' }, // Catch-all redirect
 ];
