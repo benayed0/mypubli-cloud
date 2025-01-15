@@ -13,6 +13,8 @@ import { NgClass } from '@angular/common';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ArticleService } from '../services/article/article.service';
 import { Article } from '../articles/articles.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ArticleDetailsComponent } from '../article-details/article-details.component';
 
 @Component({
   selector: 'app-file-upload',
@@ -30,8 +32,11 @@ import { Article } from '../articles/articles.component';
 export class FileUploadComponent {
   constructor(
     private toast: HotToastService,
-    private articleService: ArticleService
-  ) {}
+    private articleService: ArticleService,
+    public dialog: MatDialog
+  ) {
+    this.openDialog('1fa9336a-f1c0-4d85-8af8-9d9ea634642a');
+  }
   @ViewChild('ScientificFileInput')
   ScientificFileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('ReportFileInput') ReportFileInput!: ElementRef<HTMLInputElement>;
@@ -255,15 +260,34 @@ export class FileUploadComponent {
                   this.scientific_docs.length + 2
                 } fichiers envoyés avec succès !`
               );
-              this.addFiles.emit({
-                article_id,
-                createdAt,
-                report_name: this.reportName!,
-                scientificDocs,
-                state: 'uploaded',
-              });
-              this.clearReport();
-              this.clearAllScientificDocs();
+              this.dialog
+                .open(ArticleDetailsComponent, {
+                  data: { article_id },
+                  width: 'auto',
+                  height: 'auto',
+                  maxHeight: '80vh',
+                  maxWidth: '50vw',
+                  disableClose: true,
+                })
+                .afterClosed()
+                .subscribe((data) => {
+                  const { authors, fundings, acknowledgments, topic, topics } =
+                    data;
+                  this.addFiles.emit({
+                    article_id,
+                    createdAt,
+                    report_name: this.reportName!,
+                    scientificDocs,
+                    state: 'uploaded',
+                    authors,
+                    topics,
+                    topic,
+                    fundings,
+                    acknowledgments,
+                  });
+                  this.clearReport();
+                  this.clearAllScientificDocs();
+                });
             },
           });
         });
@@ -277,4 +301,5 @@ export class FileUploadComponent {
         this.toast.error('Merci de rajouter au moins un document scientifique');
     }
   }
+  openDialog(article_id: string) {}
 }

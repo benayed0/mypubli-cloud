@@ -54,6 +54,11 @@ export class ArticleService {
       })
     );
   }
+  getTopics(article_id: string) {
+    return this.httpClient.get<{ topics: string[] }>(
+      `${environment.API_URL}article/get_topics/${article_id}`
+    );
+  }
   getUploadFileUrls(files: uploadFileUrlRequest) {
     return this.httpClient.post<{
       reportUrl: string;
@@ -73,6 +78,12 @@ export class ArticleService {
       url: string;
     }>(
       `${environment.API_URL}article/get_file/${article_id}/${filename}?id=${id}`
+    );
+  }
+  sendArticleInfo(article: Partial<Article>) {
+    return this.httpClient.post<{ success: boolean }>(
+      `${environment.API_URL}article/info`,
+      article
     );
   }
   getByUser() {

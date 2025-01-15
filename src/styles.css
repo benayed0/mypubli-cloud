@@ -8,10 +8,12 @@ body {
 
 /* Light theme styles */
 .light-theme {
-  --primary-color: #673ab7; /* Purple */
+  --primary-color: #0091ff; /* Purple */
+  --whiten-primary-color: #cce0ff; /* Purple */
   --accent-color: #4caf50; /* Green */
-  --background-color: #ffffff; /* White */
-  --text-color: #000000; /* Black */
+  --warn-color: red;
+  --background-color: #121212; /* White */
+  --text-color: white; /* Black */
 }
 
 /* Dark theme styles */
@@ -28,7 +30,7 @@ body {
 }
 
 button {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color) !important;
   color: var(--text-color);
   border: none;
   padding: 10px 20px;

@@ -1,0 +1,129 @@
+.custom-file-label {
+  width: 92% !important; /* Set your desired max width */
+  overflow: hidden !important; /* Hide overflow content */
+  text-overflow: ellipsis !important; /* Add ellipsis for overflow text */
+  white-space: nowrap !important; /* Prevent wrapping */
+  background-color: var(--whiten-primary-color);
+  color: black;
+  font: 14px Roboto, sans-serif;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Prevents text from wrapping to the next line */
+  overflow: hidden; /* Hides overflowing content */
+  text-overflow: ellipsis; /* Adds "..." for overflowing text */
+  height: fit-content;
+  max-width: 100%;
+}
+.add:hover {
+  background-color: #5d5d87;
+  cursor: pointer;
+}
+::ng-deep .mdc-switch {
+  background-color: #121212 !important;
+}
+::ng-deep .mdc-switch:enabled .mdc-switch__track::after {
+  background: var(--primary-color) !important;
+}
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the input and the button */
+}
+
+.text {
+  border-radius: 4px;
+  background-color: var(--whiten-primary-color);
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  font-size: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  color: black;
+  flex-grow: 1; /* Allow the input to expand and take available space */
+}
+
+.clear-button {
+  background-color: transparent !important;
+  color: red;
+  filter: invert(30%) sepia(100%) saturate(7498%) hue-rotate(343deg)
+    brightness(98%) contrast(110%);
+}
+
+mat-slide-toggle {
+  margin-right: 10px;
+}
+.clear-button:hover {
+  cursor: pointer;
+  background-color: #43436a; /* Slightly darker shade for hover */
+}
+
+.clear-button {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.clear-button:focus {
+  outline: none;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.5); /* Add focus effect */
+}
+.text::placeholder {
+  color: #888787 !important;
+  opacity: 1;
+  font: 1em sans-serif;
+}
+
+.text:focus::placeholder {
+  color: #aaa; /* Optional: Change color when the input is focused */
+}
+
+ul {
+  list-style-type: none;
+  margin-top: 4px;
+}
+::ng-deep
+  .mdc-checkbox
+  .mdc-checkbox__native-control:enabled:checked
+  ~ .mdc-checkbox__background,
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled:indeterminate
+  ~ .mdc-checkbox__background,
+.mdc-checkbox
+  .mdc-checkbox__native-control[data-indeterminate="true"]:enabled
+  ~ .mdc-checkbox__background {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+::ng-deep
+  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-floating-label,
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-floating-label--float-above,
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+  color: white !important;
+}
+::ng-deep
+  .mdc-text-field--outlinet:not(
+    .mdc-text-field--disabled
+  ).mdc-text-field--focused
+  ::ng-deep
+  .mdc-notched-outline__trailing {
+  border-color: white !important;
+}
+.example-form-field {
+  width: 100%;
+}
+::ng-deep
+  .mdc-text-field--filled:not(.mdc-text-field--disabled)
+  .mdc-line-ripple::after {
+  border-color: white !important;
+}

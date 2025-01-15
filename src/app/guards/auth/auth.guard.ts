@@ -10,10 +10,11 @@ export const authGuard = () => {
 
   return authService.loggedIn.pipe(
     map(async (isLogged) => {
+      console.log(isLogged);
       if (isLogged) {
         return true;
       } else {
-        router.navigate(['home']);
+        router.navigate(['']);
         return false;
       }
     })

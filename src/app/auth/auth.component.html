@@ -3,7 +3,7 @@
     <h2></h2>
   </div>
   <div class="google-button">
-    @if(loaderService.isLoading$|async){
+    @if((loaderService.isLoading$|async) || loading){
     <div class="container-spinner">
       <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
     </div>

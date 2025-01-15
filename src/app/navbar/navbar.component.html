@@ -1,30 +1,27 @@
-<mat-toolbar color="primary">
+<mat-toolbar style="background-color: #0091ff; padding-left: 0">
   <div class="home">
-    <img
-      style="width: 50px; height: 50px"
-      src="../../assets/logo.png"
-      alt="logo"
-    />
-    <span>Mypubli Cloud </span>
+    <img style="height: 64px" src="../../assets/logo.png" alt="logo" />
   </div>
   <span class="example-spacer"></span>
   @if((authservice.loggedIn |async )&& (authservice.user|async) ){
   <div style="gap: 10px; display: flex; align-items: center">
-    <p style="font-size: medium">
+    <!-- <p style="font-size: medium">
       {{ user!.name }}
-    </p>
+    </p> -->
     <button
       (click)="authservice.logout()"
       mat-raised-button
       color="warn"
       class="example-icon"
+      style="background-color: red !important"
       aria-label="Example icon-button with share icon"
     >
       <mat-icon> logout </mat-icon>
       Déconnexion
     </button>
   </div>
-  }@else {
+  }
+  <!-- @else {
   <button
     routerLink="/login"
     mat-button
@@ -34,5 +31,5 @@
     <mat-icon> login </mat-icon>
     Connexion
   </button>
-  }
+  } -->
 </mat-toolbar>

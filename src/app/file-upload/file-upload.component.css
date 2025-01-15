@@ -54,7 +54,7 @@
 }
 
 .custom-file-label {
-  background-color: #222245;
+  background-color: var(--primary-color);
   color: #fff;
   padding: 8px 12px;
   border-radius: 4px;
@@ -67,7 +67,7 @@
 }
 
 .custom-file-label:hover {
-  background-color: #4747b8;
+  background-color: #0266b2;
 }
 
 .delete-button {

@@ -15,12 +15,20 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent {
+  loading = true;
   constructor(
     private authService: AuthService,
     private oauthService: OAuthService,
     public loaderService: LoaderService,
     private router: Router
   ) {
+    this.router.routerState.root.queryParams.subscribe((params) => {
+      if (Object.keys(params).length === 0) {
+        this.loading = false;
+      } else {
+        console.log('Query parameters:', params);
+      }
+    });
     if (window !== undefined) {
       this.authService.initConfig();
       oauthService.events.subscribe((e) => {
@@ -41,7 +49,7 @@ export class AuthComponent {
         this.authService.user.next(
           this.oauthService.getIdentityClaims() as User
         );
-        this.router.navigate(['/home']);
+        this.router.navigate(['/articles']);
       } else {
         this.authService.logout();
       }

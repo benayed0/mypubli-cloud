@@ -1,0 +1,193 @@
+// @use "@angular/material" as mat;
+// @include mat.core();
+// $black: #000000;
+// $white: #ffffff;
+// $custom-primary: #0091ff;
+// $custom-accent: #ff8c00;
+// $custom-warn: #f44336;
+
+// $custom-brand-primary: (
+//   50: #0091ff,
+//   100: #0091ff,
+//   200: #0091ff,
+//   300: #0091ff,
+//   400: #0091ff,
+//   500: #0091ff,
+//   600: #0091ff,
+//   700: #0091ff,
+//   800: #0091ff,
+//   900: #0091ff,
+//   A100: #0091ff,
+//   A200: #0091ff,
+//   A400: #0091ff,
+//   A700: #0091ff,
+//   contrast: (
+//     50: #ffffff,
+//     100: #ffffff,
+//     200: #ffffff,
+//     300: #ffffff,
+//     400: #ffffff,
+//     500: #ffffff,
+//     600: #ffffff,
+//     700: #ffffff,
+//     800: #ffffff,
+//     900: #ffffff,
+//     A100: #ffffff,
+//     A200: #ffffff,
+//     A400: #ffffff,
+//     A700: #ffffff,
+//   ),
+// );
+// $custom-dark-blue: (
+//   50: #e1eaf1,
+//   100: #b3cadc,
+//   200: #80a7c5,
+//   300: #4d83ad,
+//   400: #27699c,
+//   500: #014e8a,
+//   600: #014782,
+//   700: #013d77,
+//   800: #01356d,
+//   900: #00255a,
+//   A100: #8bafff,
+//   A200: #588cff,
+//   A400: #2569ff,
+//   A700: #0c57ff,
+//   contrast: (
+//     50: #000000,
+//     100: #000000,
+//     200: #000000,
+//     300: #ffffff,
+//     400: #ffffff,
+//     500: #ffffff,
+//     600: #ffffff,
+//     700: #ffffff,
+//     800: #ffffff,
+//     900: #ffffff,
+//     A100: #000000,
+//     A200: #000000,
+//     A400: #ffffff,
+//     A700: #ffffff,
+//   ),
+// );
+
+// $custom-brand-accent: (
+//   50: #fff1e0,
+//   100: #ffddb3,
+//   200: #ffc680,
+//   300: #ffaf4d,
+//   400: #ff9d26,
+//   500: #ff8c00,
+//   600: #ff8400,
+//   700: #ff7900,
+//   800: #ff6f00,
+//   900: #ff5c00,
+//   A100: #ffffff,
+//   A200: #fff6f2,
+//   A400: #ffd2bf,
+//   A700: #ffc0a6,
+//   contrast: (
+//     50: #ffffff,
+//     100: #ffffff,
+//     200: #ffffff,
+//     300: #ffffff,
+//     400: #ffffff,
+//     500: #ffffff,
+//     600: #ffffff,
+//     700: #ffffff,
+//     800: #ffffff,
+//     900: #ffffff,
+//     A100: #ffffff,
+//     A200: #ffffff,
+//     A400: #ffffff,
+//     A700: #ffffff,
+//   ),
+// );
+
+// $custom-brand-warn: (
+//   50: #fee8e7,
+//   100: #fcc7c3,
+//   200: #faa19b,
+//   300: #f77b72,
+//   400: #f65f54,
+//   500: #f44336,
+//   600: #f33d30,
+//   700: #f13429,
+//   800: #ef2c22,
+//   900: #ec1e16,
+//   A100: #ffffff,
+//   A200: #ffe9e9,
+//   A400: #ffb8b6,
+//   A700: #ff9f9c,
+//   contrast: (
+//     50: #ffffff,
+//     100: #ffffff,
+//     200: #ffffff,
+//     300: #ffffff,
+//     400: #ffffff,
+//     500: #ffffff,
+//     600: #ffffff,
+//     700: #ffffff,
+//     800: #ffffff,
+//     900: #ffffff,
+//     A100: #ffffff,
+//     A200: #ffffff,
+//     A400: #ffffff,
+//     A700: #ffffff,
+//   ),
+// );
+// $custom-green: (
+//   50: #e0f6e1,
+//   100: #b3eab4,
+//   200: #80dc83,
+//   300: #4dcd51,
+//   400: #26c32b,
+//   500: #00b806,
+//   600: #00b105,
+//   700: #00a804,
+//   800: #00a003,
+//   900: #009102,
+//   A100: #bdffbd,
+//   A200: #8aff8a,
+//   A400: #57ff57,
+//   A700: #3dff3d,
+//   contrast: (
+//     50: #ffffff,
+//     100: #ffffff,
+//     200: #ffffff,
+//     300: #ffffff,
+//     400: #ffffff,
+//     500: #ffffff,
+//     600: #ffffff,
+//     700: #ffffff,
+//     800: #ffffff,
+//     900: #ffffff,
+//     A100: #ffffff,
+//     A200: #ffffff,
+//     A400: #ffffff,
+//     A700: #ffffff,
+//   ),
+// );
+// /* ======== Angular material custom themes ======== */
+// $app-primary: mat.define-palette($custom-brand-primary);
+// $app-accent: mat.define-palette($custom-brand-accent);
+// $app-warn: mat.define-palette($custom-brand-warn);
+// $app-green: mat.define-palette($custom-green);
+// $app-dark-blue: mat.define-palette($custom-dark-blue);
+// $my-theme: mat.define-light-theme(
+//   (
+//     color: (
+//       primary: $app-primary,
+//       accent: $app-accent,
+//       warn: $app-warn,
+//       "green": $app-green,
+//       dark-blue: $app-dark-blue,
+//     ),
+//     typography: mat.define-typography-config(),
+//     density: 0,
+//   )
+// );
+
+// @include mat.all-component-themes($my-theme);
+// //dark
+// //@include angular-material-theme($brand-dark-theme);

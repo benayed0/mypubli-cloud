@@ -9,10 +9,11 @@ export const publicGuard = () => {
 
   return authService.loggedIn.pipe(
     map(async (isLogged) => {
+      console.log(isLogged);
       if (!isLogged) {
         return true;
       } else {
-        router.navigate(['']);
+        router.navigate(['articles']);
         return false;
       }
     })

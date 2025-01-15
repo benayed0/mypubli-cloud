@@ -49,17 +49,14 @@
 
     <!-- Weight Column -->
     <ng-container matColumnDef="report_name">
-      <th mat-header-cell *matHeaderCellDef>Rapport</th>
+      <th mat-header-cell *matHeaderCellDef>Protocole de recherche</th>
       <td mat-cell *matCellDef="let element">
         @if(loaderService.isLoading$|async){
         <ngx-skeleton-loader
           count="1"
           appearance="line"
           animation="progress"
-          [theme]="{
-  'background-color': '#545454',
-  
-}"
+          [theme]="{ 'background-color': '#545454' }"
         />
         }@else {
         <span
@@ -85,7 +82,7 @@
 
     <!-- Symbol Column -->
     <ng-container matColumnDef="scientificDoc_name">
-      <th mat-header-cell *matHeaderCellDef>Résultats scientifique</th>
+      <th mat-header-cell *matHeaderCellDef>Résultats scientifiques</th>
       <td mat-cell *matCellDef="let element">
         @if(loaderService.isLoading$|async){
         <ngx-skeleton-loader
@@ -172,14 +169,24 @@
 }"
         />
         }@else {
-        <button
-          mat-button
-          [disabled]="element.state !== 'ready'"
-          (click)="downloadFile(element, 'article')"
-        >
-          <mat-icon>download</mat-icon>
-          Télécharger</button
-        >}
+        <div style="display: flex; align-items: center">
+          <button
+            mat-button
+            [disabled]="element.state !== 'ready'"
+            (click)="downloadFile(element, 'article')"
+          >
+            <mat-icon>download</mat-icon>
+            Télécharger
+          </button>
+          <button
+            mat-icon-button
+            style="background: transparent !important"
+            (click)="openDetails(element)"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+        }
       </td>
     </ng-container>
     <!-- Row shown when there is no matching data.-->

@@ -44,7 +44,7 @@ h3 {
   overflow: hidden !important; /* Hide overflow content */
   text-overflow: ellipsis !important; /* Add ellipsis for overflow text */
   white-space: nowrap !important; /* Prevent wrapping */
-  background-color: #5d5d87;
+  background-color: transparent;
   color: #fff;
   font: 14px Roboto, sans-serif;
   padding: 8px 12px;
@@ -61,7 +61,7 @@ h3 {
 }
 
 .delete-button {
-  background: #222245;
+  background: transparent !important;
   border: none;
   padding: 4px;
   cursor: pointer;

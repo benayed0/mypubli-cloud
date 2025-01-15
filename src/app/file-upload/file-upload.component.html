@@ -2,7 +2,7 @@
   <div class="parent">
     <div class="file-parent">
       <div class="file-container">
-        <p>Rapport</p>
+        <p>Protocole de recherche</p>
         <label
           for="report"
           class="drop-container"
@@ -115,7 +115,7 @@
     </div>
     @if(sendingReport){
     <div class="progress-bar">
-      <span>En cours d'envoi du <b>Rapport</b></span>
+      <span>En cours d'envoi du <b>Protocole de recherche</b></span>
       <mat-progress-bar
         mode="indeterminate"
         [value]="reportProgressBar"
@@ -144,7 +144,7 @@
           sendingScientificDoc
       }"
     >
-      Envoyer
+      Suivant
     </button>
     @if(showErrors){ @if(!report&& scientific_docs.length===0){
     <span class="mat-error">Aucun document n'est renseigné </span>

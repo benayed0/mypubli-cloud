@@ -19,7 +19,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { LoaderService } from '../services/loader/loader.service';
-type state = 'uploaded' | 'processing' | 'ready';
+import { MatDialog } from '@angular/material/dialog';
+import { ArticleDetailsComponent } from '../article-details/article-details.component';
+type state = 'pending' | 'uploaded' | 'processing' | 'ready';
 export interface Article {
   article_id: string;
   createdAt: string;
@@ -28,6 +30,15 @@ export interface Article {
   scientificDocs: { name: string; id: string }[];
   scientificDocSelected?: { name: string; id: string };
   state: state;
+  authors: {
+    name: string;
+    conflicts: string;
+    contributions: string[];
+  }[];
+  topics: string[];
+  topic: string;
+  fundings?: string[];
+  acknowledgments?: string[];
 }
 
 @Component({
@@ -52,6 +63,7 @@ export interface Article {
   styleUrl: './articles.component.css',
 })
 export class ArticlesComponent implements OnChanges {
+  constructor(private dialog: MatDialog) {}
   @Input('articles') articles: Article[] = [];
   loaderService = inject(LoaderService);
   articleService = inject(ArticleService);
@@ -75,7 +87,16 @@ export class ArticlesComponent implements OnChanges {
       }
     });
   }
-
+  openDetails(article: Article) {
+    return;
+    this.dialog.open(ArticleDetailsComponent, {
+      data: { article_id: article.article_id },
+      width: 'auto',
+      height: 'auto',
+      maxHeight: '80vh',
+      maxWidth: '50vw',
+    });
+  }
   convertState(state: state): string {
     switch (state) {
       case 'ready':

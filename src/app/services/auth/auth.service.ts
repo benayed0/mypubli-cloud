@@ -33,7 +33,7 @@ export class AuthService {
       issuer: 'https://accounts.google.com',
 
       // URL of the SPA to redirect the user to after login
-      redirectUri: window.location.origin + '/login',
+      redirectUri: window.location.origin,
 
       // The SPA's id. The SPA is registerd with this id at the auth-server
       // clientId: 'server.code',
@@ -62,6 +62,15 @@ export class AuthService {
     // Subscribe to token refresh error event
     this.subscriptions.add(
       this.oauthService.events.subscribe((event) => {
+        console.log(event);
+        if (event.type === 'discovery_document_loaded') {
+          this.loggedIn.next(true);
+          const user = this.oauthService.getIdentityClaims() as User;
+          console.log(user);
+
+          this.user.next(this.oauthService.getIdentityClaims() as User);
+        }
+
         if (event.type === 'token_refresh_error') {
           this.logout();
           console.error('Token refresh error:', event);
