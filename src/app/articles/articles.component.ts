@@ -104,6 +104,7 @@ export class ArticlesComponent implements OnChanges {
       case 'processing':
         return 'En cours';
       case 'uploaded':
+      case 'pending':
         return 'En attente';
       default:
         return state;
