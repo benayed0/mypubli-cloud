@@ -15,6 +15,7 @@ import { ArticleService } from '../services/article/article.service';
 import { Article } from '../articles/articles.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-file-upload',
@@ -25,6 +26,7 @@ import { ArticleDetailsComponent } from '../article-details/article-details.comp
     MatProgressBarModule,
     MatSelectModule,
     NgClass,
+    MatTooltipModule,
   ],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.css',
@@ -84,7 +86,7 @@ export class FileUploadComponent {
     event.stopPropagation();
     this.isDragOverReport = false;
     if (this.report) {
-      this.toast.error('Un seul rapport est autorisé');
+      this.toast.error('Un seul protocole est autorisé');
       return;
     }
     const file = event.dataTransfer?.files[0];
@@ -180,7 +182,21 @@ export class FileUploadComponent {
   }
   sendFiles() {
     this.showErrors = true;
-    if (this.report && this.scientific_docs) {
+    console.log(this.report);
+    console.log(this.scientific_docs);
+
+    if (!this.report && this.scientific_docs.length === 0) {
+      this.toast.error(
+        'Merci de rajouter le protocole et au moins un résultat scientifique'
+      );
+      return;
+    } else if (!this.report) {
+      this.toast.error('Merci de rajouter le protocole');
+      return;
+    } else if (this.scientific_docs.length === 0) {
+      this.toast.error('Merci de rajouter au moins un résultat scientifique');
+      return;
+    } else {
       const scientificDocs = this.scientific_docs.map((doc) => ({
         name: doc.name,
         id: '',
@@ -196,7 +212,7 @@ export class FileUploadComponent {
           this.showErrors = false;
 
           const reportLoadingToast = this.toast.loading(
-            'Envoi du rapport en cours...',
+            'Envoi du protocole en cours...',
             { duration: 60000 }
           );
           this.articleService.uploadFile(reportUrl, this.report!).subscribe({
@@ -209,7 +225,7 @@ export class FileUploadComponent {
               console.log(error);
               this.reportProgressBar = 0;
               this.toast.error(
-                `Une erreur est survenue lors de l'envoi du rapport !`
+                `Une erreur est survenue lors de l'envoi du protocole !`
               );
             },
             complete: () => {
@@ -217,7 +233,7 @@ export class FileUploadComponent {
               console.log('Report uploaded');
               console.log('Uploading scientific doc');
               const scientificDocLoadingToast = this.toast.loading(
-                'Envoi du document scientifique en cours...',
+                'Envoi du résultat scientifique en cours...',
                 { duration: 60000 }
               );
               for (const i in this.scientific_docs) {
@@ -225,7 +241,7 @@ export class FileUploadComponent {
 
                 if (!file) {
                   this.toast.error(
-                    `Une erreur est survenue lors de l'envoi du document scientifique !`
+                    `Une erreur est survenue lors de l'envoi du résultat scientifique !`
                   );
                   return;
                 }
@@ -243,7 +259,7 @@ export class FileUploadComponent {
                         console.log(error);
                         this.scientifDocProgressBar = 0;
                         this.toast.error(
-                          `Une erreur est survenue lors de l'envoi du document scientifique !`
+                          `Une erreur est survenue lors de l'envoi du résultat scientifique !`
                         );
                       },
                       complete: () => {
@@ -291,14 +307,6 @@ export class FileUploadComponent {
             },
           });
         });
-    } else {
-      if (!this.report && !this.scientific_docs)
-        this.toast.error(
-          'Merci de rajouter le rapport et au moins un document scientifique'
-        );
-      else if (!this.report) this.toast.error('Merci de rajouter le Rapport');
-      else if (!this.scientific_docs)
-        this.toast.error('Merci de rajouter au moins un document scientifique');
     }
   }
   openDialog(article_id: string) {}

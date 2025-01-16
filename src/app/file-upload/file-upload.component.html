@@ -25,7 +25,10 @@
 
           }@else {
           <span class="file-info">
-            <span class="custom-file-label">
+            <span
+              class="custom-file-label"
+              [matTooltip]="report.name.length > 20 ? report.name : ''"
+            >
               {{ report.name }}
             </span>
             <button
@@ -75,7 +78,12 @@
           scientific_doc.name;let idx = $index){
 
           <span class="file-info">
-            <span class="custom-file-label">
+            <span
+              class="custom-file-label"
+              [matTooltip]="
+                scientific_doc.name.length > 20 ? scientific_doc.name : ''
+              "
+            >
               {{ scientific_doc.name }}
             </span>
             <button
@@ -123,7 +131,7 @@
     </div>
     } @if(sendingScientificDoc){
     <div class="progress-bar">
-      <span>En cours d'envoi du <b>Document scientifique</b></span>
+      <span>En cours d'envoi du <b>résultat scientifique</b></span>
 
       <mat-progress-bar
         mode="indeterminate"
@@ -152,7 +160,7 @@
 
     <span class="mat-error">Le <b>Rapport</b> est manquant.</span>
     }@else if(scientific_docs.length===0){
-    <span class="mat-error">Le <b>Document scientifique</b> est manquant.</span>
+    <span class="mat-error">Le <b>résultat scientifique</b> est manquant.</span>
     } }
   </div>
 </div>

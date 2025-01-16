@@ -56,7 +56,12 @@ export class ArticleService {
   }
   getTopics(article_id: string) {
     return this.httpClient.get<{ topics: string[] }>(
-      `${environment.API_URL}article/get_topics/${article_id}`
+      `${environment.API_URL}article/get_topics/${article_id}`,
+      {
+        headers: {
+          'X-Skip-Loader': 'true',
+        },
+      }
     );
   }
   getUploadFileUrls(files: uploadFileUrlRequest) {
@@ -89,6 +94,11 @@ export class ArticleService {
   getByUser() {
     return this.httpClient.get<Article[]>(
       `${environment.API_URL}article/get_by_user`
+    );
+  }
+  deleteArticle(article_id: string) {
+    return this.httpClient.delete<{ success: boolean; message: string }>(
+      `${environment.API_URL}article/${article_id}`
     );
   }
 }

@@ -7,15 +7,15 @@ import { LoaderService } from '../services/loader/loader.service';
 
 export const httpInterceptor: HttpInterceptorFn = (req, next) => {
   // If a service sets this header, skip the interceptor logic
-  if (req.headers.has('X-Skip-Interceptor')) {
-    return next(req);
-  }
+  const shouldSkipLoader = req.headers.get('X-Skip-Loader');
+
   const oauthService = inject(OAuthService);
   const token = oauthService.getIdToken();
   const backendCall = req.url.includes(environment.API_URL);
   const loaderService = inject(LoaderService);
-
-  loaderService.showLoadingSpinner();
+  if (!shouldSkipLoader) {
+    loaderService.showLoadingSpinner();
+  }
   if (token && backendCall) {
     req = req.clone({
       setHeaders: {

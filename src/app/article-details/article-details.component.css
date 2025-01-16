@@ -14,6 +14,7 @@
   text-overflow: ellipsis; /* Adds "..." for overflowing text */
   height: fit-content;
   max-width: 100%;
+  font-family: Roboto, sans-serif;
 }
 .add:hover {
   background-color: #5d5d87;

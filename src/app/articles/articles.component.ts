@@ -21,6 +21,9 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { LoaderService } from '../services/loader/loader.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { HotToastService } from '@ngneat/hot-toast';
+
 type state = 'pending' | 'uploaded' | 'processing' | 'ready';
 export interface Article {
   article_id: string;
@@ -45,6 +48,7 @@ export interface Article {
   selector: 'app-articles',
   standalone: true,
   imports: [
+    MatMenuModule,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
@@ -67,6 +71,7 @@ export class ArticlesComponent implements OnChanges {
   @Input('articles') articles: Article[] = [];
   loaderService = inject(LoaderService);
   articleService = inject(ArticleService);
+  toastr = inject(HotToastService);
   articleColumns: string[] = [
     'createdAt',
     'article_name',
@@ -119,6 +124,18 @@ export class ArticlesComponent implements OnChanges {
       .getDownloadUrl(article.article_id, file, id)
       .subscribe(({ url }) => {
         window.open(url);
+      });
+  }
+  deleteArticle(article: Article) {
+    this.articleService
+      .deleteArticle(article.article_id)
+      .subscribe(({ success }) => {
+        if (success) {
+          this.articles = this.articles.filter(
+            ({ article_id }) => article_id !== article.article_id
+          );
+          this.toastr.success('Article supprimé avec succès');
+        }
       });
   }
 }

@@ -24,3 +24,11 @@
   border: none;
   padding: 0;
 }
+.logo {
+  height: 64px;
+}
+@media screen and (max-width: 600px) {
+  .logo {
+    height: 56px;
+  }
+}

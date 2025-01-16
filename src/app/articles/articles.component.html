@@ -1,3 +1,5 @@
+@if(articles.length>0){
+
 <div class="parent">
   <table mat-table [dataSource]="articles" class="mat-elevation-z8">
     <!-- Position Column -->
@@ -23,7 +25,7 @@
     <!-- Name Column -->
     <ng-container matColumnDef="article_name">
       <th mat-header-cell *matHeaderCellDef>Nom de l'article</th>
-      <td mat-cell *matCellDef="let element" class="ellipsis">
+      <td mat-cell *matCellDef="let element">
         @if(loaderService.isLoading$|async){
         <ngx-skeleton-loader
           count="1"
@@ -35,14 +37,33 @@
 }"
         />
         }@else { @if(element.state!=='ready') {
-
-        <mat-progress-spinner
+        <div style="padding-top: 12%">
+          <ngx-skeleton-loader
+            count="1"
+            appearance="line"
+            animation="progress"
+            [theme]="{
+  'background-color': '#545454',
+  
+}"
+          />
+        </div>
+        <!-- <mat-progress-spinner
           mode="indeterminate"
           diameter="30"
-        ></mat-progress-spinner>
+        ></mat-progress-spinner> -->
         }@else {
-
-        {{ element.article_name }}
+        <p
+          class="ellipsis"
+          style="font-weight: bold"
+          [matTooltip]="
+            element.article_name.length > 20
+              ? element.article_name.split('.')[0]
+              : ''
+          "
+        >
+          {{ element.article_name }}
+        </p>
         } }
       </td>
     </ng-container>
@@ -59,13 +80,13 @@
           [theme]="{ 'background-color': '#545454' }"
         />
         }@else {
-        <span
-          class="file-info"
-          [matTooltip]="
-            element.report_name.length > 20 ? element.report_name : ''
-          "
-        >
-          <span class="custom-file-label">
+        <span class="file-info">
+          <span
+            class="custom-file-label"
+            [matTooltip]="
+              element.report_name.length > 20 ? element.report_name : ''
+            "
+          >
             {{ element.report_name }}
           </span>
 
@@ -170,21 +191,41 @@
         />
         }@else {
         <div style="display: flex; align-items: center">
-          <button
+          <!-- <button
             mat-button
             [disabled]="element.state !== 'ready'"
             (click)="downloadFile(element, 'article')"
           >
             <mat-icon>download</mat-icon>
             Télécharger
-          </button>
+          </button> -->
           <button
+            [matMenuTriggerFor]="menu"
             mat-icon-button
             style="background: transparent !important"
-            (click)="openDetails(element)"
           >
             <mat-icon>more_vert</mat-icon>
           </button>
+          <mat-menu #menu="matMenu">
+            <button
+              style="background-color: transparent !important"
+              mat-menu-item
+              [disabled]="element.state !== 'ready'"
+              (click)="downloadFile(element, 'article')"
+            >
+              <mat-icon>download</mat-icon>
+              <span> Télécharger</span>
+            </button>
+            <button
+              style="background-color: transparent !important"
+              mat-menu-item
+              [disabled]="element.state !== 'ready'"
+              (click)="deleteArticle(element)"
+            >
+              <mat-icon style="color: red">delete</mat-icon>
+              <span> Supprimer</span>
+            </button>
+          </mat-menu>
         </div>
         }
       </td>
@@ -212,3 +253,4 @@
     <tr mat-row *matRowDef="let row; columns: articleColumns"></tr>
   </table>
 </div>
+}
