@@ -42,6 +42,7 @@ export interface Article {
   topic: string;
   fundings?: string[];
   acknowledgments?: string[];
+  finishedAt?: Date;
 }
 
 @Component({
@@ -101,6 +102,16 @@ export class ArticlesComponent implements OnChanges {
       maxHeight: '80vh',
       maxWidth: '50vw',
     });
+  }
+  calculateDiff(article: Article) {
+    const diffInMs =
+      new Date(article.finishedAt!).getTime() -
+      new Date(article.createdAt).getTime();
+    const minutes = Math.floor(diffInMs / (1000 * 60));
+    const seconds = Math.floor((diffInMs % (1000 * 60)) / 1000);
+    return article.finishedAt
+      ? `Prêt en ${minutes} minutes ${seconds} secondes`
+      : '';
   }
   convertState(state: state): string {
     switch (state) {
