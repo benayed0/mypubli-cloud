@@ -109,8 +109,10 @@ export class ArticlesComponent implements OnChanges {
       new Date(article.createdAt).getTime();
     const minutes = Math.floor(diffInMs / (1000 * 60));
     const seconds = Math.floor((diffInMs % (1000 * 60)) / 1000);
-    return article.finishedAt
-      ? `Prêt en ${minutes} minutes ${seconds} secondes`
+    return article.state === 'ready'
+      ? article.finishedAt
+        ? `Prêt en ${minutes} minutes ${seconds} secondes`
+        : ''
       : '';
   }
   convertState(state: state): string {

@@ -134,3 +134,21 @@ ul {
   bottom: -20px;
   background: #424242;
 }
+.disabled-input.mat-slide-toggle.mat-disabled {
+  opacity: 1 !important; /* Keep the original color opacity */
+  cursor: not-allowed; /* Change cursor to indicate it's disabled */
+  pointer-events: none; /* Prevent user interaction */
+}
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-bar {
+  background-color: #49c5b6;
+}
+
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-thumb {
+  background-color: #49c5b6;
+}

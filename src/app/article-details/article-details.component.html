@@ -35,34 +35,31 @@
       }</select
     >} }
   </div>
-  <div
-    style="
-      display: flex;
-      align-items: center;
-      column-gap: 10px;
-      flex-wrap: wrap;
-    "
-  >
+  <div>
     @if(!article){ @for (author of authors; track author; let idx = $index) {
     <!-- If it's the first author, show label + button inline -->
     @if (idx === 0) {
-    <p>Auteurs :</p>
-    <div class="input-container" style="width: 300px">
-      <mat-form-field class="example-form-field">
-        <mat-label>{{ author_number(idx + 1) }} auteur</mat-label>
-        <input
-          matInput
-          type="text"
-          [value]="author.name"
-          (input)="updateAuthorName(idx, $event)"
-        />
-      </mat-form-field>
+    <div style="display: flex; align-items: center; column-gap: 10px">
+      <p>Auteurs :</p>
+      <div class="input-container" style="width: 300px">
+        <mat-form-field class="example-form-field">
+          <mat-label>{{ author_number(idx + 1) }} auteur</mat-label>
+          <input
+            matInput
+            type="text"
+            [value]="author.name"
+            (input)="updateAuthorName(idx, $event)"
+          />
+        </mat-form-field>
+      </div>
+      @if(authors.length<2){
+      <button (click)="addAuthor()" color="primary" mat-raised-button>
+        Ajouter un auteur
+      </button>
+
+      }
     </div>
-    @if(authors.length<2){
-    <button (click)="addAuthor()" color="primary" mat-raised-button>
-      Ajouter un auteur
-    </button>
-    } } @else {
+    } @else {
     <div style="display: flex; align-items: center; gap: 4px">
       <!-- Subsequent authors go on new lines -->
       <div class="input-container" style="width: 380px; margin-top: 10px">
@@ -95,122 +92,146 @@
     } } }
   </div>
   <!-- FINANCEMENTS -->
-  <div
-    style="display: flex; align-items: center; column-gap: 6px; flex-wrap: wrap"
-  >
+  <div>
     @for(fund of fundings;track fund;let idx = $index;) {
     <!-- If it's the first author, show label + button inline -->
     @if (idx === 0) {
-    <p>Financements :</p>
-    <div class="input-container" style="width: 258px">
-      <mat-form-field class="example-form-field">
-        <input
-          [ngClass]="{ 'disabled-input': article !== undefined }"
-          placeholder="BPI..."
-          matInput
-          type="text"
-          [value]="fund.value"
-          (input)="updateFundingName(idx, $event)"
-        />
-      </mat-form-field>
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        column-gap: 6px;
+        flex-wrap: wrap;
+      "
+    >
+      <p>Financements :</p>
+      <div class="input-container" style="width: 258px">
+        <mat-form-field class="example-form-field">
+          <input
+            [ngClass]="{ 'disabled-input': article !== undefined }"
+            placeholder="BPI..."
+            matInput
+            type="text"
+            [value]="fund.value"
+            (input)="updateFundingName(idx, $event)"
+          />
+        </mat-form-field>
+      </div>
+      @if(fundings.length===1 && article === undefined){
+      <button (click)="addFund()" mat-raised-button color="primary">
+        Ajouter un financement
+      </button>
+      }
     </div>
-    @if(fundings.length===1 && article === undefined){
-    <button (click)="addFund()" mat-raised-button color="primary">
-      Ajouter un financement
-    </button>
-    } } @else {
-    <!-- Subsequent authors go on new lines -->
-    <div class="input-container" style="width: 383px; margin-top: 10px">
-      <mat-form-field class="example-form-field" style="margin-left: 122px">
-        <input
-          [ngClass]="{ 'disabled-input': article !== undefined }"
-          matInput
-          placeholder="BPI..."
-          type="text"
-          [value]="fund.value"
-          (input)="updateFundingName(idx, $event)"
-        />
-        @if(article === undefined){
+    } @else {
+    <div style="display: flex; align-items: center; column-gap: 10px">
+      <!-- Subsequent authors go on new lines -->
+      <div class="input-container" style="width: 383px; margin-top: 10px">
+        <mat-form-field class="example-form-field" style="margin-left: 122px">
+          <input
+            [ngClass]="{ 'disabled-input': article !== undefined }"
+            matInput
+            placeholder="BPI..."
+            type="text"
+            [value]="fund.value"
+            (input)="updateFundingName(idx, $event)"
+          />
+          @if(article === undefined){
 
-        <button
-          matSuffix
-          mat-icon-button
-          style="background: transparent !important; color: red"
-          aria-label="Clear"
-          (click)="removeFunding(idx)"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
+          <button
+            matSuffix
+            mat-icon-button
+            style="background: transparent !important; color: red"
+            aria-label="Clear"
+            (click)="removeFunding(idx)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
+      </div>
+      @if(fundings.length>1 && idx === fundings.length - 1&& article ===
+      undefined) {
+      <button (click)="addFund()" mat-raised-button color="primary">
+        Ajouter un financement</button
+      >}
     </div>
-    @if(fundings.length>1 && idx === fundings.length - 1&& article ===
-    undefined) {
-    <button (click)="addFund()" mat-raised-button color="primary">
-      Ajouter un financement</button
-    >} } }
+    } }
   </div>
   <!-- REMERCIEMENTS -->
-  <div
-    style="display: flex; align-items: center; column-gap: 6px; flex-wrap: wrap"
-  >
+  <div>
     @for(acknowledgment of acknowledgments;track acknowledgment;let idx =
     $index;) {
+
     <!-- If it's the first author, show label + button inline -->
     @if (idx === 0) {
-    <p>Remerciements :</p>
-    <div class="input-container" style="width: 258px">
-      <mat-form-field class="example-form-field">
-        <input
-          placeholder="BPI..."
-          [ngClass]="{ 'disabled-input': article !== undefined }"
-          matInput
-          type="text"
-          placeholder="CHU Grenoble Alpes..."
-          [value]="acknowledgment.value"
-          (input)="updateAcknowledgmentName(idx, $event)"
-        />
-      </mat-form-field>
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        column-gap: 6px;
+        flex-wrap: wrap;
+      "
+    >
+      <p>Remerciements :</p>
+      <div class="input-container" style="width: 258px">
+        <mat-form-field class="example-form-field">
+          <input
+            placeholder="BPI..."
+            [ngClass]="{ 'disabled-input': article !== undefined }"
+            matInput
+            type="text"
+            placeholder="CHU Grenoble Alpes..."
+            [value]="acknowledgment.value"
+            (input)="updateAcknowledgmentName(idx, $event)"
+          />
+        </mat-form-field>
+      </div>
+      @if(acknowledgments.length===1&& article === undefined){
+      <button (click)="addAcknowledgment()" mat-raised-button color="primary">
+        Ajouter un remerciement
+      </button>
+      }
     </div>
-    @if(acknowledgments.length===1&& article === undefined){
-    <button (click)="addAcknowledgment()" mat-raised-button color="primary">
-      Ajouter un remerciement
-    </button>
-    } } @else {
+    } @else {
     <!-- Subsequent authors go on new lines -->
-    <div class="input-container" style="width: 391px; margin-top: 10px">
-      <mat-form-field class="example-form-field" style="margin-left: 133px">
-        <input
-          matInput
-          [ngClass]="{ 'disabled-input': article !== undefined }"
-          placeholder="CHU Grenoble Alpes..."
-          [value]="acknowledgment.value"
-          (input)="updateAcknowledgmentName(idx, $event)"
-        />
-        @if(article === undefined){
-        <button
-          matSuffix
-          mat-icon-button
-          style="background: transparent !important; color: red"
-          aria-label="Clear"
-          (click)="removeAcknowledgment(idx)"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-        }
-      </mat-form-field>
+    <div style="display: flex; align-items: center; column-gap: 10px">
+      <div class="input-container" style="width: 391px; margin-top: 10px">
+        <mat-form-field class="example-form-field" style="margin-left: 133px">
+          <input
+            matInput
+            [ngClass]="{ 'disabled-input': article !== undefined }"
+            placeholder="CHU Grenoble Alpes..."
+            [value]="acknowledgment.value"
+            (input)="updateAcknowledgmentName(idx, $event)"
+          />
+          @if(article === undefined){
+          <button
+            matSuffix
+            mat-icon-button
+            style="background: transparent !important; color: red"
+            aria-label="Clear"
+            (click)="removeAcknowledgment(idx)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
+      </div>
+      @if(acknowledgments.length>1 && idx === acknowledgments.length - 1 &&
+      article === undefined) {
+      <button (click)="addAcknowledgment()" mat-raised-button color="primary">
+        Ajouter un remerciement</button
+      >}
     </div>
-    @if(acknowledgments.length>1 && idx === acknowledgments.length - 1 &&
-    article === undefined) {
-    <button (click)="addAcknowledgment()" mat-raised-button color="primary">
-      Ajouter un remerciement</button
-    >} } }
+    } }
   </div>
   @if(authorValid) { @if(authors.length>1 && authors[1].name!=='') {
   <mat-slide-toggle
     color="primary"
     [(ngModel)]="equalContributions"
     [disabled]="article !== undefined"
+    [ngClass]="{ 'disabled-input': article !== undefined }"
   >
     <p>
       @if(!equalContributions) { Contributions indépendantes}@else {
@@ -240,7 +261,7 @@
         matInput
         type="text"
         class="text"
-        placeholder="Aucun conflit d'intérêt"
+        placeholder="Détails du conflit d'intérêt"
         [(ngModel)]="authors[idx].conflicts"
       ></textarea>
       }

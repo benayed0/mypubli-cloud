@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -47,6 +47,18 @@ export class ArticleDetailsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: { article_id: string; article?: Article }
   ) {}
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (!this.data.article) {
+      const confirmation = confirm(
+        'You have unsaved changes. Are you sure you want to leave?'
+      );
+      if (!confirmation) {
+        $event.preventDefault();
+      }
+    }
+    $event.returnValue = true;
+  }
   article = this.data.article ? this.data.article : undefined;
   topics: string[] = [];
   topic_name = '';
@@ -112,7 +124,10 @@ export class ArticleDetailsComponent implements OnInit {
           next: ({ topics }) => {
             if (topics.length > 0) {
               this.topics = topics;
-              this.toast.success('Sujets générés avec succès');
+              this.topic_name = topics[0];
+              this.toast.success(
+                'Sujets générés avec succès ! \n Vous pouvez maintenant choisir un sujet.'
+              );
               console.log('Topics fetched:', this.topics);
               this.destroy$.next();
             }
