@@ -23,9 +23,6 @@
 ::ng-deep .mdc-switch {
   background-color: #121212 !important;
 }
-::ng-deep .mdc-switch:enabled .mdc-switch__track::after {
-  background: var(--primary-color) !important;
-}
 .input-container {
   position: relative;
   display: flex;
@@ -127,4 +124,13 @@ ul {
   .mdc-text-field--filled:not(.mdc-text-field--disabled)
   .mdc-line-ripple::after {
   border-color: white !important;
+}
+.disabled-input {
+  pointer-events: none;
+}
+.dialog-footer {
+  width: 100%;
+  position: sticky;
+  bottom: -20px;
+  background: #424242;
 }

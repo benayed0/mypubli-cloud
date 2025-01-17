@@ -6,6 +6,7 @@ import { User } from '../interfaces/user.interface';
 import { LoaderService } from '../services/loader/loader.service';
 import { AsyncPipe } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HotToastService } from '@ngneat/hot-toast';
 @Component({
   selector: 'app-auth',
   standalone: true,
@@ -20,7 +21,8 @@ export class AuthComponent {
     private authService: AuthService,
     private oauthService: OAuthService,
     public loaderService: LoaderService,
-    private router: Router
+    private router: Router,
+    private toastr: HotToastService
   ) {
     this.router.routerState.root.queryParams.subscribe((params) => {
       if (Object.keys(params).length === 0) {
@@ -42,7 +44,7 @@ export class AuthComponent {
     this.oauthService.initLoginFlow();
   }
   serverLogin() {
-    this.authService.serverLogin().subscribe(({ success, message }) => {
+    this.authService.gmailAuth().subscribe(({ success, message }) => {
       console.log(success, message);
       if (success) {
         this.authService.loggedIn.next(true);
@@ -54,5 +56,8 @@ export class AuthComponent {
         this.authService.logout();
       }
     });
+  }
+  emailLogin() {
+    this.toastr.info('Bientôt disponible...');
   }
 }

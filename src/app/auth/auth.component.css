@@ -6,8 +6,9 @@
   background-color: WHITE;
   background-image: none;
   border: 1px solid #747775;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: white !important;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: #1f1f1f;
@@ -18,7 +19,7 @@
   letter-spacing: 0.25px;
   outline: none;
   overflow: hidden;
-  padding: 0 12px;
+  padding: 28px;
   position: relative;
   text-align: center;
   -webkit-transition: background-color 0.218s, border-color 0.218s,
@@ -28,7 +29,7 @@
   white-space: nowrap;
   width: auto;
   max-width: 400px;
-  min-width: min-content;
+  min-width: 320px;
 }
 
 .gsi-material-button .gsi-material-button-icon {
@@ -60,6 +61,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: top;
+  font-size: 20px;
 }
 
 .gsi-material-button .gsi-material-button-state {
@@ -104,10 +106,60 @@
   background-color: #303030;
   opacity: 8%;
 }
-.parent {
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  height: 100%;
+  flex-direction: column;
+  padding: 50px;
+}
+.parent {
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
+.titles {
+  text-align: center;
+  margin-bottom: 70px;
+}
+.buttons {
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.doctor-image {
+  position: absolute; /* Position it inside the content container */
+  bottom: -28px; /* Adjust the offset as needed */
+  right: -70px; /* Adjust the offset as needed */
+  z-index: 1;
+}
+
+.doctor-image img {
+  max-height: 150px;
+  width: auto;
+  border-radius: 50%; /* Optional styling for the image */
+}
+@media screen and (max-width: 768px) {
+  .doctor-image {
+    position: absolute; /* Position it inside the content container */
+    bottom: -22px; /* Adjust the offset as needed */
+    right: -46px; /* Adjust the offset as needed */
+    z-index: 1;
+  }
+
+  .doctor-image img {
+    max-height: 110px;
+    width: auto;
+    border-radius: 50%; /* Optional styling for the image */
+  }
 }

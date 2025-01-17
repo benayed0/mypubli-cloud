@@ -16,6 +16,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ArticleService } from '../services/article/article.service';
 import { interval, takeWhile, switchMap, Subject, takeUntil } from 'rxjs';
+import { Article } from '../articles/articles.component';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-article-details',
@@ -31,6 +33,7 @@ import { interval, takeWhile, switchMap, Subject, takeUntil } from 'rxjs';
     MatIconModule,
     MatSlideToggleModule,
     MatCheckboxModule,
+    NgClass,
   ],
   templateUrl: './article-details.component.html',
   styleUrl: './article-details.component.css',
@@ -41,12 +44,22 @@ export class ArticleDetailsComponent implements OnInit {
 
     private toast: HotToastService,
     private articleService: ArticleService,
-    @Inject(MAT_DIALOG_DATA) public data: { article_id: string }
+    @Inject(MAT_DIALOG_DATA)
+    public data: { article_id: string; article?: Article }
   ) {}
+  article = this.data.article ? this.data.article : undefined;
   topics: string[] = [];
   topic_name = '';
-  acknowledgments: { value: string }[] = [{ value: '' }];
-  fundings: { value: string }[] = [{ value: '' }];
+  acknowledgments: { value: string }[] = this.data.article
+    ? this.data.article.acknowledgments
+      ? this.data.article.acknowledgments.map((value) => ({ value }))
+      : [{ value: '' }]
+    : [{ value: '' }];
+  fundings: { value: string }[] = this.data.article
+    ? this.data.article.fundings
+      ? this.data.article.fundings.map((value) => ({ value }))
+      : [{ value: '' }]
+    : [{ value: '' }];
   equalContributions = true;
   contributions = [
     'provided data',
@@ -60,15 +73,21 @@ export class ArticleDetailsComponent implements OnInit {
     withConflicts: boolean;
     conflicts: string;
     contributions: string[];
-  }[] = [
-    {
-      name: '',
-      withConflicts: false,
-      conflicts: '',
-      contributions: this.contributions,
-    },
-  ];
+  }[] = this.data.article
+    ? this.data.article.authors.map((author) => ({
+        ...author,
+        withConflicts: author.conflicts !== '',
+      }))
+    : [
+        {
+          name: '',
+          withConflicts: false,
+          conflicts: '',
+          contributions: this.contributions,
+        },
+      ];
   private destroy$ = new Subject<void>();
+
   author_number(id: number): string {
     return id === 1 ? '1er' : `${id}ème`;
   }
@@ -82,29 +101,31 @@ export class ArticleDetailsComponent implements OnInit {
   }
 
   getTopics() {
-    console.log('Article ID:', this.data.article_id);
-    interval(5000) // Emit every 5 seconds
-      .pipe(
-        takeUntil(this.destroy$), // Continue while topics is empty
-        switchMap(() => this.articleService.getTopics(this.data.article_id)) // Fetch topics
-      )
-      .subscribe({
-        next: ({ topics }) => {
-          if (topics.length > 0) {
-            this.topics = topics;
-            this.toast.success('Sujets générés avec succès');
-            console.log('Topics fetched:', this.topics);
-            this.destroy$.next();
-          }
-        },
-        error: (err) => {
-          console.error('Error fetching topics:', err);
-          this.toast.error('Failed to fetch topics. Please try again later.');
-        },
-        complete: () => {
-          console.log('Completed');
-        },
-      });
+    if (this.data.article_id !== undefined) {
+      console.log('Article ID:', this.data.article_id);
+      interval(5000) // Emit every 5 seconds
+        .pipe(
+          takeUntil(this.destroy$), // Continue while topics is empty
+          switchMap(() => this.articleService.getTopics(this.data.article_id)) // Fetch topics
+        )
+        .subscribe({
+          next: ({ topics }) => {
+            if (topics.length > 0) {
+              this.topics = topics;
+              this.toast.success('Sujets générés avec succès');
+              console.log('Topics fetched:', this.topics);
+              this.destroy$.next();
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching topics:', err);
+            this.toast.error('Failed to fetch topics. Please try again later.');
+          },
+          complete: () => {
+            console.log('Completed');
+          },
+        });
+    }
   }
   get authorValid() {
     return !this.authors.every((author) => author.name === '');

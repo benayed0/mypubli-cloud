@@ -193,14 +193,6 @@
         />
         }@else {
         <div style="display: flex; align-items: center">
-          <!-- <button
-            mat-button
-            [disabled]="element.state !== 'ready'"
-            (click)="downloadFile(element, 'article')"
-          >
-            <mat-icon>download</mat-icon>
-            Télécharger
-          </button> -->
           <button
             [matMenuTriggerFor]="menu"
             mat-icon-button
@@ -217,6 +209,15 @@
             >
               <mat-icon>download</mat-icon>
               <span> Télécharger</span>
+            </button>
+            <button
+              style="background-color: transparent !important"
+              mat-menu-item
+              [disabled]="element.state !== 'ready'"
+              (click)="openDetails(element)"
+            >
+              <mat-icon>info</mat-icon>
+              <span> Détails</span>
             </button>
             <button
               style="background-color: transparent !important"

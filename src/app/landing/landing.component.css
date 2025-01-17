@@ -1,0 +1,29 @@
+.landing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.auth {
+  width: 60%;
+}
+.partners {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+@media screen and (max-width: 1000px) {
+  .landing {
+    flex-direction: column;
+  }
+  .auth {
+    width: 100%;
+  }
+  .partners {
+    width: 100%;
+  }
+}

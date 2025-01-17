@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { AuthComponent } from '../auth/auth.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [],
+  imports: [AuthComponent],
   templateUrl: './landing.component.html',
-  styleUrl: './landing.component.css'
+  styleUrl: './landing.component.css',
 })
-export class LandingComponent {
-
-}
+export class LandingComponent {}

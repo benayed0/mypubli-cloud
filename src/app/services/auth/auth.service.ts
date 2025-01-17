@@ -55,6 +55,7 @@ export class AuthService {
       disablePKCE: false,
       showDebugInformation: true,
       strictDiscoveryDocumentValidation: false,
+      tokenEndpoint: 'https://oauth2.googleapis.com/token',
     };
     this.oauthService.configure(authConfig);
     this.oauthService.setupAutomaticSilentRefresh();
@@ -90,15 +91,30 @@ export class AuthService {
     });
   }
 
-  serverLogin() {
+  getToken() {
+    return (
+      this.oauthService.getIdToken() ?? localStorage.getItem('email_token')
+    );
+  }
+  gmailAuth() {
     const token = this.oauthService.getIdToken();
     return this.http.get<{
       success: boolean;
       message: string;
-    }>(`${environment.API_URL}user/login`, {
+    }>(`${environment.API_URL}user/gmail_auth`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+    });
+  }
+  emailAuth(email: string, password: string) {
+    return this.http.post<{
+      success: boolean;
+      message: string;
+      token: string;
+    }>(`${environment.API_URL}user/email_auth`, {
+      email,
+      password,
     });
   }
   logout() {

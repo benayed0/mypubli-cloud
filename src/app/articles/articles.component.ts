@@ -23,6 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { HotToastService } from '@ngneat/hot-toast';
+import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
 
 type state = 'pending' | 'uploaded' | 'processing' | 'ready';
 export interface Article {
@@ -94,9 +95,8 @@ export class ArticlesComponent implements OnChanges {
     });
   }
   openDetails(article: Article) {
-    return;
     this.dialog.open(ArticleDetailsComponent, {
-      data: { article_id: article.article_id },
+      data: { article: article },
       width: 'auto',
       height: 'auto',
       maxHeight: '80vh',
@@ -138,14 +138,25 @@ export class ArticlesComponent implements OnChanges {
       });
   }
   deleteArticle(article: Article) {
-    this.articleService
-      .deleteArticle(article.article_id)
-      .subscribe(({ success }) => {
-        if (success) {
-          this.articles = this.articles.filter(
-            ({ article_id }) => article_id !== article.article_id
-          );
-          this.toastr.success('Article supprimé avec succès');
+    this.dialog
+      .open(ConfirmDeleteComponent, {
+        data: { name: article.article_name },
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.articleService
+            .deleteArticle(article.article_id)
+            .subscribe(({ success }) => {
+              if (success) {
+                this.articles = this.articles.filter(
+                  ({ article_id }) => article_id !== article.article_id
+                );
+                this.toastr.success('Article supprimé avec succès');
+              }
+            });
+        } else {
+          this.toastr.info('Suppression annulée');
         }
       });
   }
