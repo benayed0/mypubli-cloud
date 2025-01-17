@@ -57,8 +57,10 @@
           class="ellipsis"
           style="font-weight: bold"
           [matTooltip]="
-            element.article_name.length > 20
-              ? element.article_name.split('.')[0]
+            element.article_name
+              ? element.article_name.length > 20
+                ? element.article_name.split('.')[0]
+                : ''
               : ''
           "
         >
