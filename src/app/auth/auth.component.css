@@ -139,13 +139,13 @@
 
 .doctor-image {
   position: absolute; /* Position it inside the content container */
-  bottom: -28px; /* Adjust the offset as needed */
-  right: -70px; /* Adjust the offset as needed */
+  bottom: -43px; /* Adjust the offset as needed */
+  right: -122px; /* Adjust the offset as needed */
   z-index: 1;
 }
 
 .doctor-image img {
-  max-height: 150px;
+  max-height: 250px;
   width: auto;
   border-radius: 50%; /* Optional styling for the image */
 }

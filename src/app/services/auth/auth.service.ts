@@ -91,11 +91,6 @@ export class AuthService {
     });
   }
 
-  getToken() {
-    return (
-      this.oauthService.getIdToken() ?? localStorage.getItem('email_token')
-    );
-  }
   gmailAuth() {
     const token = this.oauthService.getIdToken();
     return this.http.get<{

@@ -1,8 +1,3 @@
-@if((loaderService.isLoading$|async) || loading){
-<div class="container-spinner">
-  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-</div>
-}@else {
 <div class="container">
   <div class="parent">
     <div class="titles">
@@ -51,12 +46,6 @@
         </button>
       </div>
       <div class="google-button">
-        @if((loaderService.isLoading$|async) || loading){
-        <div class="container-spinner">
-          <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-        </div>
-        }@else {
-
         <button class="gsi-material-button" (click)="emailLogin()">
           <div class="gsi-material-button-state"></div>
           <div class="gsi-material-button-content-wrapper">
@@ -69,7 +58,6 @@
             </span>
           </div>
         </button>
-        }
       </div>
     </div>
     <div class="doctor-image">
@@ -77,4 +65,3 @@
     </div>
   </div>
 </div>
-}

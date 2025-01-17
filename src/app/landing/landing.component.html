@@ -1,4 +1,17 @@
-<div class="landing">
+<div
+  class="container-spinner"
+  [ngStyle]="{
+    display: !(loaderService.isLoading$ | async) || loading ? 'none' : 'flex'
+  }"
+>
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+<div
+  class="landing"
+  [ngStyle]="{
+    display: (loaderService.isLoading$ | async) || loading ? 'none' : 'flex'
+  }"
+>
   <div class="auth">
     <app-auth></app-auth>
   </div>
