@@ -76,15 +76,7 @@ export interface Article {
   styleUrl: './articles.component.css',
 })
 export class ArticlesComponent implements OnChanges {
-  constructor(private dialog: MatDialog) {
-    dialog.open(ArticleDetailsComponent, {
-      data: { article_id: 'ef5e724d-eb8b-4698-ba36-b41574f053be' },
-      width: 'auto',
-      height: 'auto',
-      maxHeight: '80vh',
-      maxWidth: '50vw',
-    });
-  }
+  constructor(private dialog: MatDialog) {}
   @Input('articles') articles: Article[] = [];
   loaderService = inject(LoaderService);
   articleService = inject(ArticleService);
