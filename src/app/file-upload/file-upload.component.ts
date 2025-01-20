@@ -16,6 +16,7 @@ import { Article, STATE } from '../articles/articles.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-file-upload',
@@ -51,10 +52,12 @@ export class FileUploadComponent {
   scientificDocFileTypes = [
     'application/pdf',
     '.doc',
+    '.pptx',
     '.docx',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   ];
   @Output() addFiles = new EventEmitter<Article>();
   //Report file upload
@@ -154,6 +157,8 @@ export class FileUploadComponent {
   }
 
   handleFileScientificDoc(file: File): void {
+    console.log(file.type);
+
     if (this.scientificDocFileTypes.includes(file.type)) {
       this.scientific_docs?.push({ file, name: file.name });
     } else {
@@ -228,7 +233,7 @@ export class FileUploadComponent {
                 `Une erreur est survenue lors de l'envoi du protocole !`
               );
             },
-            complete: () => {
+            complete: async () => {
               reportLoadingToast.close();
               console.log('Report uploaded');
               console.log('Uploading scientific doc');
@@ -275,6 +280,12 @@ export class FileUploadComponent {
                 `${
                   this.scientific_docs.length + 1
                 } fichiers envoyés avec succès !`
+              );
+              await lastValueFrom(
+                this.articleService.updateState(
+                  article_id,
+                  STATE.WAITING_FOR_TOPICS
+                )
               );
               this.dialog
                 .open(ArticleDetailsComponent, {

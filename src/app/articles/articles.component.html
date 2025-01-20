@@ -18,7 +18,6 @@
             <button
               style="background-color: transparent !important"
               mat-menu-item
-              [disabled]="element.state !== 'ARTICLE_READY'"
               (click)="openDetails(element)"
             >
               <mat-icon>info</mat-icon>
@@ -27,7 +26,7 @@
             <button
               style="background-color: transparent !important"
               mat-menu-item
-              [disabled]="element.state !== 'ARTICLE_READY'"
+              [disabled]="element.state === 'WRITING_ARTICLE'"
               (click)="deleteArticle(element)"
             >
               <mat-icon style="color: red">delete</mat-icon>
@@ -185,7 +184,11 @@
       </td>
     </tr>
     <tr mat-header-row *matHeaderRowDef="articleColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: articleColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: articleColumns"
+      [ngClass]="{ 'blink-effect': highlightedRow === row.article_id }"
+    ></tr>
   </table>
 </div>
 }

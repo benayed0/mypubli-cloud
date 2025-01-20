@@ -11,7 +11,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import { ArticleService } from '../services/article/article.service';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -71,6 +71,7 @@ export interface Article {
     MatInputModule,
     FormsModule,
     NgxSkeletonLoaderModule,
+    NgClass,
   ],
   templateUrl: './articles.component.html',
   styleUrl: './articles.component.css',
@@ -90,15 +91,48 @@ export class ArticlesComponent implements OnChanges {
     'state',
     'dl',
   ];
-  onSelectInput(article: Article, target: any) {
-    console.log(article, target.value);
+  highlightedRow: string = '';
+  trackState(article: Article) {
+    console.log('tracking ', article.article_id);
+
+    const createdAt = new Date(article.createdAt).getTime();
+    const now = new Date().getTime();
+    const tenMinutesInMs = 10 * 60 * 1000;
+    const article_index = this.articles.findIndex(
+      ({ article_id }) => article_id === article.article_id
+    );
+    const delay = tenMinutesInMs - (now - createdAt);
+
+    setTimeout(() => {
+      console.log('checking ', article.article_id);
+
+      this.articleService
+        .getOne(article.article_id)
+        .subscribe(({ state, article_name, finishedAt, topic }) => {
+          if (state === 'ARTICLE_READY') {
+            console.log(article_index);
+            this.highlightedRow = article.article_id;
+            this.articles[article_index].state = state;
+            this.articles[article_index].article_name = article_name;
+            this.articles[article_index].finishedAt = finishedAt;
+            this.articles = [...this.articles];
+            this.toastr.success(
+              `Votre article portant le sujet : ${topic} est prêt !`
+            );
+          }
+        });
+    }, delay);
   }
   ngOnChanges(): void {
     // Preselect the first scientificDoc for each article
     this.articles.forEach((article) => {
+      if (article.state === 'WRITING_ARTICLE') {
+        this.trackState(article);
+        console.log('tracked');
+      }
+
       if (article.scientificDocs && article.scientificDocs.length > 0) {
         article.scientificDocSelected = article.scientificDocs[0];
-        console.log(article.scientificDocSelected);
       }
     });
   }
@@ -128,7 +162,7 @@ export class ArticlesComponent implements OnChanges {
       case 'ARTICLE_READY':
         return 'Prêt';
       case 'WRITING_ARTICLE':
-        return 'En cours';
+        return "Création de l'article";
       case 'WAITING_FOR_ARTICLE':
       case 'WAITING_FOR_TOPIC':
       case 'WAITING_FOR_TOPICS':

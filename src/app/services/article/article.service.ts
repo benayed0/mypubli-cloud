@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { Article } from '../../articles/articles.component';
+import { Article, STATE } from '../../articles/articles.component';
 
 export interface uploadFileUrlRequest {
   report: { name: string };
@@ -54,9 +54,9 @@ export class ArticleService {
       })
     );
   }
-  getTopics(article_id: string) {
-    return this.httpClient.get<{ topics: string[] }>(
-      `${environment.API_URL}article/get_topics/${article_id}`,
+  getOne(article_id: string) {
+    return this.httpClient.get<Article>(
+      `${environment.API_URL}article/one/${article_id}`,
       {
         headers: {
           'X-Skip-Loader': 'true',
@@ -83,6 +83,12 @@ export class ArticleService {
       url: string;
     }>(
       `${environment.API_URL}article/get_file/${article_id}/${filename}?id=${id}`
+    );
+  }
+  updateState(article_id: string, state: STATE) {
+    return this.httpClient.put<{ success: boolean }>(
+      `${environment.API_URL}article/update_article`,
+      { article_id, state }
     );
   }
   sendArticleInfo(article: Partial<Article>) {

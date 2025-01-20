@@ -71,3 +71,18 @@ h3 {
   transition: color 0.2s ease;
   border-radius: 10%;
 }
+@keyframes blink {
+  0% {
+    background-color: #525050; /* Blink color */
+  }
+  50% {
+    background-color: transparent; /* Original or no color */
+  }
+  100% {
+    background-color: #525050; /* Back to blink color */
+  }
+}
+
+.blink-effect {
+  animation: blink 1s ease-in-out 3; /* Blinks 3 times over 3 seconds */
+}

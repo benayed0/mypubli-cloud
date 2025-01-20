@@ -64,7 +64,9 @@ export class ArticleDetailsComponent implements OnInit {
   article = this.data.article ? this.data.article : undefined;
   topics: string[] = [];
   topic_name = '';
-  additional_infos = '';
+  additional_infos = this.data.article
+    ? this.data.article?.additional_infos
+    : '';
   acknowledgments: { value: string }[] = this.data.article
     ? this.data.article.acknowledgments
       ? this.data.article.acknowledgments.map((value) => ({ value }))
@@ -120,7 +122,7 @@ export class ArticleDetailsComponent implements OnInit {
       interval(5000) // Emit every 5 seconds
         .pipe(
           takeUntil(this.destroy$), // Continue while topics is empty
-          switchMap(() => this.articleService.getTopics(this.data.article_id)) // Fetch topics
+          switchMap(() => this.articleService.getOne(this.data.article_id)) // Fetch topics
         )
         .subscribe({
           next: ({ topics }) => {

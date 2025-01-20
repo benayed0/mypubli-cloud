@@ -1,8 +1,12 @@
 <h1 mat-dialog-title>
   @if(article) {Titre :
   <span style="font-weight: normal; font-size: smaller">
-    {{ article.article_name!.split(".")[0] }}</span
-  >
+    {{
+      article.article_name
+        ? article.article_name.split(".")[0]
+        : "Création de l'article..."
+    }}
+  </span>
   }@else { Renseigner les détails }
 </h1>
 <div
@@ -224,7 +228,10 @@
   {
   <div style="width: 100%">
     <p>Informations supplémentaires et limites de l'article :</p>
-    <mat-form-field style="width: 100%">
+    <mat-form-field
+      style="width: 100%"
+      [ngClass]="{ 'disabled-input': article !== undefined }"
+    >
       <textarea
         rows="5"
         [(ngModel)]="additional_infos"
@@ -244,26 +251,29 @@
   <div style="display: flex; gap: 15%; width: 100%">
     <div style="display: flex; flex-direction: column">
       <div style="display: flex">
+        @if(article===undefined) {
         <mat-slide-toggle
-          [disabled]="article !== undefined"
           color="primary"
           [(ngModel)]="authors[idx].withConflicts"
         >
-        </mat-slide-toggle>
+        </mat-slide-toggle
+        >}
         <p style="margin-top: 0">
           @if(!author.withConflicts) {Aucun conflits d'intérêts}@else { Conflits
           d'intérêts : }
         </p>
       </div>
       @if(author.withConflicts) {
-      <textarea
-        [ngClass]="{ 'disabled-input': article !== undefined }"
-        matInput
-        type="text"
-        class="text"
-        placeholder="Détails du conflit d'intérêt"
-        [(ngModel)]="authors[idx].conflicts"
-      ></textarea>
+      <mat-form-field>
+        <textarea
+          [ngClass]="{ 'disabled-input': article !== undefined }"
+          matInput
+          type="text"
+          rows="6"
+          placeholder="Détails du conflit d'intérêt"
+          [(ngModel)]="authors[idx].conflicts"
+        ></textarea>
+      </mat-form-field>
       }
     </div>
     <div>

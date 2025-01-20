@@ -71,7 +71,7 @@
             <span class="custom-file-label"> Ajouter vos documents</span></span
           >
           <span class="file-format"
-            >formats acceptés : <b>.pdf .docx .xlsx</b></span
+            >formats acceptés : <b>.pdf .docx .pptx .xlsx</b></span
           >
 
           }@else {@for(scientific_doc of scientific_docs;track
@@ -112,7 +112,7 @@
           <input
             type="file"
             id="scientific_doc"
-            accept=".doc,.docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/pdf"
+            accept=".doc,.docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/pdf, .pptx"
             (change)="onScientificDocFileSelected($event)"
             required
             #ScientificFileInput
