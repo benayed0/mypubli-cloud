@@ -18,7 +18,7 @@
             <button
               style="background-color: transparent !important"
               mat-menu-item
-              [disabled]="element.state !== 'ready'"
+              [disabled]="element.state !== 'ARTICLE_READY'"
               (click)="openDetails(element)"
             >
               <mat-icon>info</mat-icon>
@@ -27,7 +27,7 @@
             <button
               style="background-color: transparent !important"
               mat-menu-item
-              [disabled]="element.state !== 'ready'"
+              [disabled]="element.state !== 'ARTICLE_READY'"
               (click)="deleteArticle(element)"
             >
               <mat-icon style="color: red">delete</mat-icon>
@@ -47,7 +47,7 @@
     <ng-container matColumnDef="article_name">
       <th mat-header-cell *matHeaderCellDef>Nom de l'article</th>
       <td mat-cell *matCellDef="let element">
-        @if(element.state!=='ready') {
+        @if(element.state!=='ARTICLE_READY') {
         <div style="padding-top: 12%">
           <ngx-skeleton-loader
             count="1"
@@ -149,7 +149,7 @@
         <span [matTooltip]="calculateDiff(element)">
           {{ convertState(element.state) }}</span
         >
-        @if(element.state!=='ready') {
+        @if(element.state!=='ARTICLE_READY') {
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         }
       </td>
@@ -162,7 +162,7 @@
         <button
           color="primary"
           mat-raised-button
-          [disabled]="element.state !== 'ready'"
+          [disabled]="element.state !== 'ARTICLE_READY'"
           (click)="downloadFile(element, 'article')"
         >
           <mat-icon>download</mat-icon>
