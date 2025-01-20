@@ -3,7 +3,7 @@
     <img class="logo" src="../../assets/logo.png" alt="logo" />
   </div>
   <span class="example-spacer"></span>
-  @if((authservice.loggedIn |async )&& (authservice.user|async) ){
+  @if(authservice.loggedIn |async ){
   <div style="gap: 10px; display: flex; align-items: center">
     <!-- <p style="font-size: medium">
       {{ user!.name }}

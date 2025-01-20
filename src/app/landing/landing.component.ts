@@ -13,11 +13,13 @@ import { Router } from '@angular/router';
   styleUrl: './landing.component.css',
 })
 export class LandingComponent {
+  initConfig = false;
   constructor(private router: Router) {
     this.router.routerState.root.queryParams.subscribe((params) => {
       if (Object.keys(params).length === 0) {
         this.loading = false;
       } else {
+        this.initConfig = params['scope'] !== null;
         console.log('Query parameters:', params);
       }
     });

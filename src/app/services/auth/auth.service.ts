@@ -5,7 +5,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../interfaces/user.interface';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, tap } from 'rxjs';
+import { TokenService } from '../token/token.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,16 +18,19 @@ export class AuthService {
     private oauthService: OAuthService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private tokenService: TokenService
   ) {
     if (isPlatformBrowser(platformId)) {
-      this.initConfig();
+      if (
+        this.tokenService.getToken() &&
+        tokenService.loggedInType() === 'google'
+      ) {
+        this.initConfig();
+      }
     }
   }
-  loggedIn = new BehaviorSubject(this.oauthService.hasValidAccessToken());
-  user = new BehaviorSubject<User | null>(
-    this.oauthService.getIdentityClaims() as User
-  );
+  loggedIn = new BehaviorSubject(this.tokenService.getToken() !== null);
   initConfig() {
     const authConfig: AuthConfig = {
       // Url of the Identity Provider
@@ -64,10 +68,6 @@ export class AuthService {
     this.subscriptions.add(
       this.oauthService.events.subscribe((event) => {
         if (event.type === 'discovery_document_loaded') {
-          this.loggedIn.next(true);
-          const user = this.oauthService.getIdentityClaims() as User;
-
-          this.user.next(this.oauthService.getIdentityClaims() as User);
         }
 
         if (event.type === 'token_refresh_error') {
@@ -76,10 +76,6 @@ export class AuthService {
         }
         if (event.type === 'token_received') {
           console.log('Token received');
-          this.loggedIn.next(true);
-          const user = this.oauthService.getIdentityClaims() as User;
-
-          this.user.next(this.oauthService.getIdentityClaims() as User);
         }
       })
     );
@@ -110,6 +106,7 @@ export class AuthService {
     });
   }
   logout() {
+    localStorage.removeItem('email_token');
     this.oauthService.logOut();
     this.loggedIn.next(false);
     this.router.navigate(['/login']);

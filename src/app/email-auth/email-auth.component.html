@@ -1,1 +1,62 @@
-<p>email-auth works!</p>
+<h2 mat-dialog-title>Connexion par email</h2>
+<mat-dialog-content>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label style="color: white">Email</mat-label>
+      <input
+        type="email"
+        matInput
+        [formControl]="emailFormControl"
+        placeholder="Ex. pat@example.com"
+      />
+      @if (emailFormControl.hasError('email') &&
+      !emailFormControl.hasError('required')) {
+      <mat-error>Entrez un Email valide</mat-error>
+      } @if (emailFormControl.hasError('required')) {
+      <mat-error>Email est <strong>requis</strong></mat-error>
+      }
+    </mat-form-field>
+  </form>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label style="color: white">Mot de passe</mat-label>
+      <input
+        [type]="passwordVisible ? 'text' : 'password'"
+        matInput
+        [formControl]="passwordFormControl"
+      />
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="passwordVisible = !passwordVisible"
+      >
+        <mat-icon>visibility</mat-icon>
+      </button>
+      <mat-error>
+        @if(passwordFormControl.errors?.['required']) {Mot de passe est
+        <strong>requis</strong>} @else if
+        (passwordFormControl.errors?.['lower']) { Votre mot de passe doit
+        comporter 1 minuscule } @else if
+        (passwordFormControl.errors?.['uppercase']) { Votre mot de passe doit
+        comporter 1 majuscule } @else if
+        (passwordFormControl.errors?.['special']) { Votre mot de passe doit
+        comporter 1 caractère spécial } @else if
+        (passwordFormControl.errors?.['number']) { Votre mot de passe doit
+        comporter 1 chiffre }@else if(passwordFormControl.errors?.['length'])
+        {Votre mot de passe doit comporter 8 caractères}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions style="justify-content: end">
+  <button mat-raised-button (click)="onNoClick()">Retour</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onYesClick()"
+    cdkFocusInitial
+  >
+    Connexion
+  </button>
+</mat-dialog-actions>
