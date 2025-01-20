@@ -1,5 +1,5 @@
 .custom-file-label {
-  width: 92% !important; /* Set your desired max width */
+  min-width: 85%; /* Set your desired max width */
   overflow: hidden !important; /* Hide overflow content */
   text-overflow: ellipsis !important; /* Add ellipsis for overflow text */
   white-space: nowrap !important; /* Prevent wrapping */
@@ -13,7 +13,6 @@
   overflow: hidden; /* Hides overflowing content */
   text-overflow: ellipsis; /* Adds "..." for overflowing text */
   height: fit-content;
-  max-width: 100%;
   font-family: Roboto, sans-serif;
 }
 .add:hover {
@@ -133,6 +132,7 @@ ul {
   position: sticky;
   bottom: -20px;
   background: #424242;
+  z-index: 1;
 }
 .disabled-input.mat-slide-toggle.mat-disabled {
   opacity: 1 !important; /* Keep the original color opacity */
@@ -151,4 +151,70 @@ ul {
   .mat-slide-toggle.mat-checked:not(.mat-disabled)
   .mat-slide-toggle-thumb {
   background-color: #49c5b6;
+}
+.first-element {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+.example-form-field {
+  width: 300px;
+  margin-left: 0px !important;
+}
+.second-author {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 17%;
+  width: 100%;
+}
+.second-fund {
+  margin-left: 29.5%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.second-ack {
+  margin-left: 31.5%;
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  column-gap: 10px;
+}
+.subject-title {
+  width: 10%;
+}
+
+.second-fund-empty {
+  margin-left: 24.5%;
+}
+.second-ack-empty {
+  margin-left: 26%;
+}
+@media screen and (max-width: 1200px) {
+  .subject-title {
+    width: 20%;
+  }
+  .second-author,
+  .second-fund,
+  .second-ack {
+    margin-left: 0;
+    display: grid;
+  }
+  .first-element {
+    display: grid;
+    gap: 10px;
+  }
+  button {
+    width: 100%;
+  }
+  .example-form-field {
+    width: 300px;
+    margin-left: 0px !important;
+  }
+  .custom-file-label {
+    width: 80%;
+  }
 }

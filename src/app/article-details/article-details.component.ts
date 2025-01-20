@@ -1,8 +1,9 @@
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
-import { FormsModule, NgModel } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
+  MatDialog,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
@@ -15,9 +16,10 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ArticleService } from '../services/article/article.service';
-import { interval, takeWhile, switchMap, Subject, takeUntil } from 'rxjs';
-import { Article } from '../articles/articles.component';
+import { interval, switchMap, Subject, takeUntil } from 'rxjs';
+import { Article, STATE } from '../articles/articles.component';
 import { NgClass } from '@angular/common';
+import { TopicInputComponent } from './topic-input/topic-input.component';
 
 @Component({
   selector: 'app-article-details',
@@ -44,24 +46,25 @@ export class ArticleDetailsComponent implements OnInit {
 
     private toast: HotToastService,
     private articleService: ArticleService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA)
     public data: { article_id: string; article?: Article }
   ) {}
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any) {
-    if (!this.data.article) {
-      const confirmation = confirm(
-        'You have unsaved changes. Are you sure you want to leave?'
-      );
-      if (!confirmation) {
-        $event.preventDefault();
-      }
-    }
-    $event.returnValue = true;
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // unloadNotification(event: any) {
+  //   console.log('loaded');
+
+  //   if (this.data.article === undefined) {
+  //     event.preventDefault();
+
+  //     (event as BeforeUnloadEvent).returnValue =
+  //       'You have unsaved changes. Are you sure you want to leave?';
+  //   }
+  // }
   article = this.data.article ? this.data.article : undefined;
   topics: string[] = [];
   topic_name = '';
+  additional_infos = '';
   acknowledgments: { value: string }[] = this.data.article
     ? this.data.article.acknowledgments
       ? this.data.article.acknowledgments.map((value) => ({ value }))
@@ -72,7 +75,6 @@ export class ArticleDetailsComponent implements OnInit {
       ? this.data.article.fundings.map((value) => ({ value }))
       : [{ value: '' }]
     : [{ value: '' }];
-  equalContributions = true;
   contributions = [
     'provided data',
     'wrote the article',
@@ -142,8 +144,21 @@ export class ArticleDetailsComponent implements OnInit {
         });
     }
   }
-  get authorValid() {
-    return !this.authors.every((author) => author.name === '');
+  checkTopic(event: Event) {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    if (selectedValue === 'button') {
+      this.dialog
+        .open(TopicInputComponent, {
+          width: '600px',
+        })
+        .afterClosed()
+        .subscribe((topic) => {
+          if (topic !== undefined && topic !== '') {
+            this.topics.push(topic);
+            this.topic_name = topic;
+          }
+        });
+    }
   }
   removeAuthor(index: number) {
     this.authors.splice(index, 1);
@@ -265,8 +280,6 @@ export class ArticleDetailsComponent implements OnInit {
     }
     const authors = this.authors.map(({ withConflicts, ...rest }) => rest);
 
-    console.log(fundings);
-    console.log(acknowledgments);
     const data = {
       article_id: this.data.article_id,
       authors,
@@ -274,6 +287,8 @@ export class ArticleDetailsComponent implements OnInit {
       topic: this.topic_name,
       fundings,
       acknowledgments,
+      additional_infos: this.additional_infos,
+      state: STATE.WAITING_FOR_ARTICLE,
     };
     this.articleService.sendArticleInfo(data).subscribe(({ success }) => {
       if (success) {

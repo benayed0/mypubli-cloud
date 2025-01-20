@@ -3,21 +3,23 @@
   <span style="font-weight: normal; font-size: smaller">
     {{ article.article_name!.split(".")[0] }}</span
   >
-  }@else { Renseignez les détails }
+  }@else { Renseigner les détails }
 </h1>
 <div
   mat-dialog-content
   style="display: flex; align-items: start; flex-direction: column; gap: 10px"
 >
-  <div style="display: flex; gap: 10px; width: 100%">
-    <div style="width: 10%">
+  <div style="display: flex; gap: 10px; width: 100%; align-items: center">
+    <div class="subject-title">
       <p>Sujet :</p>
     </div>
     @if(article){
     <p style="font-size: 14px">{{ article.topic }}</p>
     }@else { @if(topics.length === 0) {
     <div class="custom-file-label" style="align-self: center">
-      <div style="display: flex; align-items: center; gap: 10px">
+      <div
+        style="display: flex; align-items: center; gap: 10px; min-width: 90%"
+      >
         <mat-progress-spinner
           mode="indeterminate"
           diameter="20"
@@ -26,32 +28,35 @@
       </div>
     </div>
     }@else {
-    <select class="custom-file-label" [(ngModel)]="topic_name">
+    <select
+      class="custom-file-label"
+      [(ngModel)]="topic_name"
+      (change)="checkTopic($event)"
+    >
       @for (topic of topics; track topic) {
 
       <option [ngValue]="topic">
         {{ topic }}
       </option>
-      }</select
+      }
+      <option value="button">Choisir mon propre sujet</option></select
     >} }
   </div>
   <div>
     @if(!article){ @for (author of authors; track author; let idx = $index) {
     <!-- If it's the first author, show label + button inline -->
     @if (idx === 0) {
-    <div style="display: flex; align-items: center; column-gap: 10px">
+    <div class="first-element">
       <p>Auteurs :</p>
-      <div class="input-container" style="width: 300px">
-        <mat-form-field class="example-form-field">
-          <mat-label>{{ author_number(idx + 1) }} auteur</mat-label>
-          <input
-            matInput
-            type="text"
-            [value]="author.name"
-            (input)="updateAuthorName(idx, $event)"
-          />
-        </mat-form-field>
-      </div>
+      <mat-form-field class="example-form-field">
+        <mat-label>{{ author_number(idx + 1) }} auteur</mat-label>
+        <input
+          matInput
+          type="text"
+          [value]="author.name"
+          (input)="updateAuthorName(idx, $event)"
+        />
+      </mat-form-field>
       @if(authors.length<2){
       <button (click)="addAuthor()" color="primary" mat-raised-button>
         Ajouter un auteur
@@ -60,9 +65,9 @@
       }
     </div>
     } @else {
-    <div style="display: flex; align-items: center; gap: 4px">
+    <div class="second-author">
       <!-- Subsequent authors go on new lines -->
-      <div class="input-container" style="width: 380px; margin-top: 10px">
+      <div class="input-container" style="margin-top: 10px">
         <mat-form-field class="example-form-field" style="margin-left: 80px">
           <mat-label>{{ author_number(idx + 1) }} auteur</mat-label>
           <input
@@ -96,27 +101,18 @@
     @for(fund of fundings;track fund;let idx = $index;) {
     <!-- If it's the first author, show label + button inline -->
     @if (idx === 0) {
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        column-gap: 6px;
-        flex-wrap: wrap;
-      "
-    >
+    <div class="first-element">
       <p>Financements :</p>
-      <div class="input-container" style="width: 258px">
-        <mat-form-field class="example-form-field">
-          <input
-            [ngClass]="{ 'disabled-input': article !== undefined }"
-            placeholder="BPI..."
-            matInput
-            type="text"
-            [value]="fund.value"
-            (input)="updateFundingName(idx, $event)"
-          />
-        </mat-form-field>
-      </div>
+      <mat-form-field class="example-form-field">
+        <input
+          [ngClass]="{ 'disabled-input': article !== undefined }"
+          placeholder="BPI..."
+          matInput
+          type="text"
+          [value]="fund.value"
+          (input)="updateFundingName(idx, $event)"
+        />
+      </mat-form-field>
       @if(fundings.length===1 && article === undefined){
       <button (click)="addFund()" mat-raised-button color="primary">
         Ajouter un financement
@@ -124,9 +120,12 @@
       }
     </div>
     } @else {
-    <div style="display: flex; align-items: center; column-gap: 10px">
+    <div
+      class="second-fund"
+      [ngClass]="{ 'second-fund-empty': article === undefined }"
+    >
       <!-- Subsequent authors go on new lines -->
-      <div class="input-container" style="width: 383px; margin-top: 10px">
+      <div class="input-container" style="margin-top: 10px">
         <mat-form-field class="example-form-field" style="margin-left: 122px">
           <input
             [ngClass]="{ 'disabled-input': article !== undefined }"
@@ -165,28 +164,19 @@
 
     <!-- If it's the first author, show label + button inline -->
     @if (idx === 0) {
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        column-gap: 6px;
-        flex-wrap: wrap;
-      "
-    >
+    <div class="first-element">
       <p>Remerciements :</p>
-      <div class="input-container" style="width: 258px">
-        <mat-form-field class="example-form-field">
-          <input
-            placeholder="BPI..."
-            [ngClass]="{ 'disabled-input': article !== undefined }"
-            matInput
-            type="text"
-            placeholder="CHU Grenoble Alpes..."
-            [value]="acknowledgment.value"
-            (input)="updateAcknowledgmentName(idx, $event)"
-          />
-        </mat-form-field>
-      </div>
+      <mat-form-field class="example-form-field">
+        <input
+          placeholder="BPI..."
+          [ngClass]="{ 'disabled-input': article !== undefined }"
+          matInput
+          type="text"
+          placeholder="CHU Grenoble Alpes..."
+          [value]="acknowledgment.value"
+          (input)="updateAcknowledgmentName(idx, $event)"
+        />
+      </mat-form-field>
       @if(acknowledgments.length===1&& article === undefined){
       <button (click)="addAcknowledgment()" mat-raised-button color="primary">
         Ajouter un remerciement
@@ -195,8 +185,11 @@
     </div>
     } @else {
     <!-- Subsequent authors go on new lines -->
-    <div style="display: flex; align-items: center; column-gap: 10px">
-      <div class="input-container" style="width: 391px; margin-top: 10px">
+    <div
+      class="second-ack"
+      [ngClass]="{ 'second-ack-empty': article === undefined }"
+    >
+      <div class="input-container" style="margin-top: 10px">
         <mat-form-field class="example-form-field" style="margin-left: 133px">
           <input
             matInput
@@ -226,18 +219,25 @@
     </div>
     } }
   </div>
-  @if(authorValid) { @if(authors.length>1 && authors[1].name!=='') {
-  <mat-slide-toggle
-    color="primary"
-    [(ngModel)]="equalContributions"
-    [disabled]="article !== undefined"
-    [ngClass]="{ 'disabled-input': article !== undefined }"
-  >
-    <p>
-      @if(!equalContributions) { Contributions indépendantes}@else {
-      Contributions éguales }
-    </p> </mat-slide-toggle
-  >} } @for(author of authors;track author;let idx = $index;) {
+  <!-- ADDITIONAL INFO -->
+  @if(article!==undefined && article.additional_infos || article === undefined)
+  {
+  <div style="width: 100%">
+    <p>Informations supplémentaires et limites de l'article :</p>
+    <mat-form-field style="width: 100%">
+      <textarea
+        rows="5"
+        [(ngModel)]="additional_infos"
+        matInput
+        placeholder="Par exemple :
+      - Utiliser absolument cette référence dans l'introduction : Harbeck, N. et al. (2019). Breast cancer. Nature reviews Disease primers
+      - Nous n'avons recruté que 145 patients au lieu de 300 initialement prévus."
+      ></textarea>
+    </mat-form-field>
+  </div>
+  }
+  <!-- AUTEURS -->
+  @for(author of authors;track author;let idx = $index;) {
   @if(author.name!==''){
 
   <p>Auteur {{ idx + 1 }} : {{ author.name }}</p>

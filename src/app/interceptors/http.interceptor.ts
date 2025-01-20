@@ -23,7 +23,6 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
       },
     });
   }
-  console.log('Request:', req);
 
   return next(req).pipe(
     finalize(() => {

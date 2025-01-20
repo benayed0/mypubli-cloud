@@ -63,11 +63,9 @@ export class AuthService {
     // Subscribe to token refresh error event
     this.subscriptions.add(
       this.oauthService.events.subscribe((event) => {
-        console.log(event);
         if (event.type === 'discovery_document_loaded') {
           this.loggedIn.next(true);
           const user = this.oauthService.getIdentityClaims() as User;
-          console.log(user);
 
           this.user.next(this.oauthService.getIdentityClaims() as User);
         }
@@ -80,7 +78,6 @@ export class AuthService {
           console.log('Token received');
           this.loggedIn.next(true);
           const user = this.oauthService.getIdentityClaims() as User;
-          console.log(user);
 
           this.user.next(this.oauthService.getIdentityClaims() as User);
         }

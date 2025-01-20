@@ -86,8 +86,8 @@ export class ArticleService {
     );
   }
   sendArticleInfo(article: Partial<Article>) {
-    return this.httpClient.post<{ success: boolean }>(
-      `${environment.API_URL}article/info`,
+    return this.httpClient.put<{ success: boolean }>(
+      `${environment.API_URL}article/update_article`,
       article
     );
   }

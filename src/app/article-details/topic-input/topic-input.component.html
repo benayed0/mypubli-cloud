@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Entrer votre sujet :</h2>
+<mat-dialog-content>
+  <mat-form-field style="width: 100%">
+    <textarea
+      [(ngModel)]="topic"
+      matInput
+      placeholder="Quelles sont les disparités dans l’efficacité du traitement selon le sexe du patient ?"
+    ></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions style="justify-content: flex-end">
+  <button mat-button color="warn" (click)="onNoClick()">Annuler</button>
+  <button
+    mat-button
+    color="primary"
+    [mat-dialog-close]="topic()"
+    cdkFocusInitial
+  >
+    Ajouter
+  </button>
+</mat-dialog-actions>

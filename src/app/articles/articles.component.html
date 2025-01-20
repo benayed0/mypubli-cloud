@@ -3,6 +3,40 @@
 <div class="parent">
   <table mat-table [dataSource]="articles" class="mat-elevation-z8">
     <!-- Position Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <div style="display: flex; align-items: center">
+          <button
+            [matMenuTriggerFor]="menu"
+            mat-icon-button
+            style="background: transparent !important"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button
+              style="background-color: transparent !important"
+              mat-menu-item
+              [disabled]="element.state !== 'ready'"
+              (click)="openDetails(element)"
+            >
+              <mat-icon>info</mat-icon>
+              <span> Détails</span>
+            </button>
+            <button
+              style="background-color: transparent !important"
+              mat-menu-item
+              [disabled]="element.state !== 'ready'"
+              (click)="deleteArticle(element)"
+            >
+              <mat-icon style="color: red">delete</mat-icon>
+              <span> Supprimer</span>
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="createdAt">
       <th mat-header-cell *matHeaderCellDef>Date de création</th>
       <td mat-cell *matCellDef="let element">
@@ -122,47 +156,18 @@
     </ng-container>
 
     <!-- Empty Column -->
-    <ng-container matColumnDef="action">
+    <ng-container matColumnDef="dl">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
-        <div style="display: flex; align-items: center">
-          <button
-            [matMenuTriggerFor]="menu"
-            mat-icon-button
-            style="background: transparent !important"
-          >
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button
-              style="background-color: transparent !important"
-              mat-menu-item
-              [disabled]="element.state !== 'ready'"
-              (click)="downloadFile(element, 'article')"
-            >
-              <mat-icon>download</mat-icon>
-              <span> Télécharger</span>
-            </button>
-            <button
-              style="background-color: transparent !important"
-              mat-menu-item
-              [disabled]="element.state !== 'ready'"
-              (click)="openDetails(element)"
-            >
-              <mat-icon>info</mat-icon>
-              <span> Détails</span>
-            </button>
-            <button
-              style="background-color: transparent !important"
-              mat-menu-item
-              [disabled]="element.state !== 'ready'"
-              (click)="deleteArticle(element)"
-            >
-              <mat-icon style="color: red">delete</mat-icon>
-              <span> Supprimer</span>
-            </button>
-          </mat-menu>
-        </div>
+        <button
+          color="primary"
+          mat-raised-button
+          [disabled]="element.state !== 'ready'"
+          (click)="downloadFile(element, 'article')"
+        >
+          <mat-icon>download</mat-icon>
+          Télécharger
+        </button>
       </td>
     </ng-container>
     <!-- Row shown when there is no matching data.-->

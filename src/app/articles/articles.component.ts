@@ -25,7 +25,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
 
-type state = 'pending' | 'uploaded' | 'processing' | 'ready';
+export enum STATE {
+  UPLOADING_FILES = 'UPLOADING_FILES',
+  WAITING_FOR_TOPICS = 'WAITING_FOR_TOPICS',
+  WAITING_FOR_TOPIC = 'WAITING_FOR_TOPIC',
+  WAITING_FOR_ARTICLE = 'WAITING_FOR_ARTICLE',
+  WRITING_ARTICLE = 'WRITING_ARTICLE',
+  ARTICLE_READY = 'ARTICLE_READY',
+}
 export interface Article {
   article_id: string;
   createdAt: string;
@@ -33,7 +40,7 @@ export interface Article {
   report_name: string;
   scientificDocs: { name: string; id: string }[];
   scientificDocSelected?: { name: string; id: string };
-  state: state;
+  state: STATE;
   authors: {
     name: string;
     conflicts: string;
@@ -44,6 +51,7 @@ export interface Article {
   fundings?: string[];
   acknowledgments?: string[];
   finishedAt?: Date;
+  additional_infos?: string;
 }
 
 @Component({
@@ -63,24 +71,32 @@ export interface Article {
     MatInputModule,
     FormsModule,
     NgxSkeletonLoaderModule,
-    AsyncPipe,
   ],
   templateUrl: './articles.component.html',
   styleUrl: './articles.component.css',
 })
 export class ArticlesComponent implements OnChanges {
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {
+    dialog.open(ArticleDetailsComponent, {
+      data: { article_id: 'ef5e724d-eb8b-4698-ba36-b41574f053be' },
+      width: 'auto',
+      height: 'auto',
+      maxHeight: '80vh',
+      maxWidth: '50vw',
+    });
+  }
   @Input('articles') articles: Article[] = [];
   loaderService = inject(LoaderService);
   articleService = inject(ArticleService);
   toastr = inject(HotToastService);
   articleColumns: string[] = [
+    'action',
     'createdAt',
     'article_name',
     'report_name',
     'scientificDoc_name',
     'state',
-    'action',
+    'dl',
   ];
   onSelectInput(article: Article, target: any) {
     console.log(article, target.value);
@@ -109,20 +125,21 @@ export class ArticlesComponent implements OnChanges {
       new Date(article.createdAt).getTime();
     const minutes = Math.floor(diffInMs / (1000 * 60));
     const seconds = Math.floor((diffInMs % (1000 * 60)) / 1000);
-    return article.state === 'ready'
+    return article.state === 'ARTICLE_READY'
       ? article.finishedAt
         ? `Prêt en ${minutes} minutes ${seconds} secondes`
         : ''
       : '';
   }
-  convertState(state: state): string {
+  convertState(state: STATE): string {
     switch (state) {
-      case 'ready':
+      case 'ARTICLE_READY':
         return 'Prêt';
-      case 'processing':
+      case 'WRITING_ARTICLE':
         return 'En cours';
-      case 'uploaded':
-      case 'pending':
+      case 'WAITING_FOR_ARTICLE':
+      case 'WAITING_FOR_TOPIC':
+      case 'WAITING_FOR_TOPICS':
         return 'En attente';
       default:
         return state;

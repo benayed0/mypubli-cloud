@@ -12,7 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NgClass } from '@angular/common';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ArticleService } from '../services/article/article.service';
-import { Article } from '../articles/articles.component';
+import { Article, STATE } from '../articles/articles.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -273,7 +273,7 @@ export class FileUploadComponent {
 
               this.toast.success(
                 `${
-                  this.scientific_docs.length + 2
+                  this.scientific_docs.length + 1
                 } fichiers envoyés avec succès !`
               );
               this.dialog
@@ -287,18 +287,25 @@ export class FileUploadComponent {
                 })
                 .afterClosed()
                 .subscribe((data) => {
-                  const { authors, fundings, acknowledgments, topic, topics } =
-                    data;
+                  const {
+                    authors,
+                    fundings,
+                    acknowledgments,
+                    topic,
+                    topics,
+                    additional_infos,
+                  } = data;
                   this.addFiles.emit({
                     article_id,
                     createdAt,
                     report_name: this.reportName!,
                     scientificDocs,
-                    state: 'uploaded',
+                    state: STATE.WAITING_FOR_ARTICLE,
                     authors,
                     topics,
                     topic,
                     fundings,
+                    additional_infos,
                     acknowledgments,
                   });
                   this.clearReport();

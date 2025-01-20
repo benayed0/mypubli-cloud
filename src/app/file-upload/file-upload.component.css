@@ -126,7 +126,7 @@ p {
   width: 50%;
 }
 .button {
-  width: 100% !important; /* Adjust width to match the drop-container */
+  width: 93% !important; /* Adjust width to match the drop-container */
   margin-top: 20px;
 }
 .disabled {
@@ -151,6 +151,10 @@ mat-progress-bar {
 
   .file-container {
     width: 100%; /* Full width in mobile */
+  }
+
+  .button {
+    width: 100% !important; /* Adjust width to match the drop-container */
   }
 }
 .mat-error {
