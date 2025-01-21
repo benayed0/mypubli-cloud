@@ -16,7 +16,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ArticleService } from '../services/article/article.service';
-import { interval, switchMap, Subject, takeUntil } from 'rxjs';
+import { interval, switchMap, Subject, takeUntil, lastValueFrom } from 'rxjs';
 import { Article, STATE } from '../articles/articles.component';
 import { NgClass } from '@angular/common';
 import { TopicInputComponent } from './topic-input/topic-input.component';
@@ -148,7 +148,7 @@ export class ArticleDetailsComponent implements OnInit {
     if (this.data.article_id !== undefined) {
       const { article_id } = this.data;
       this.articleService.getTopics(article_id).subscribe({
-        next: (topics) => {
+        next: async (topics) => {
           if (topics.length > 0) {
             this.topics = topics;
             this.topic_name = topics[0];
@@ -156,6 +156,12 @@ export class ArticleDetailsComponent implements OnInit {
               'Sujets générés avec succès ! \n Vous pouvez maintenant choisir un sujet.'
             );
             console.log('Topics fetched:', this.topics);
+            await lastValueFrom(
+              this.articleService.updateState(
+                article_id,
+                STATE.WAITING_FOR_TOPIC
+              )
+            );
           }
         },
         error: (error) => {
