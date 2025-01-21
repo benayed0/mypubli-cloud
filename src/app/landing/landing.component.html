@@ -1,7 +1,7 @@
 <div
   class="container-spinner"
   [ngStyle]="{
-    display: !(loaderService.isLoading$ | async) || loading ? 'none' : 'flex'
+    display: (loaderService.isLoading$ | async) || loading ? 'flex' : 'none'
   }"
 >
   <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
@@ -9,7 +9,7 @@
 <div
   class="landing"
   [ngStyle]="{
-    display: (loaderService.isLoading$ | async) || loading ? 'none' : 'flex'
+    display: !(loaderService.isLoading$ | async) || !loading ? 'flex' : 'none'
   }"
 >
   <div class="auth">

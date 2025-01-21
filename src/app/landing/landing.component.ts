@@ -18,6 +18,7 @@ export class LandingComponent {
     this.router.routerState.root.queryParams.subscribe((params) => {
       if (Object.keys(params).length === 0) {
         this.loading = false;
+        console.log('No query parameters');
       } else {
         this.initConfig = params['scope'] !== null;
         console.log('Query parameters:', params);
