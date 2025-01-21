@@ -86,3 +86,12 @@ h3 {
 .blink-effect {
   animation: blink 1s ease-in-out 3; /* Blinks 3 times over 3 seconds */
 }
+.sort-emoji {
+  visibility: hidden;
+}
+.created-at:hover {
+  .sort-emoji {
+    visibility: visible;
+  }
+  cursor: pointer;
+}

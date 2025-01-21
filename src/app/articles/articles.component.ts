@@ -92,6 +92,21 @@ export class ArticlesComponent implements OnChanges {
     'dl',
   ];
   highlightedRow: string = '';
+  sortAscending = true;
+  sortData(column: string) {
+    if (column === 'createdAt') {
+      this.sortAscending = !this.sortAscending; // Toggle the sorting order
+
+      const sorted = this.articles.sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime(); // Convert to timestamp for accurate comparison
+        const dateB = new Date(b.createdAt).getTime();
+
+        // Sort based on the current sorting direction
+        return this.sortAscending ? dateA - dateB : dateB - dateA;
+      });
+      this.articles = [...sorted];
+    }
+  }
   trackState(article: Article) {
     console.log('tracking ', article.article_id);
 

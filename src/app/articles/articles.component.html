@@ -37,7 +37,28 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef>Date de création</th>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        class="created-at"
+        (click)="sortData('createdAt')"
+      >
+        <div style="display: flex; align-items: center; gap: 5px">
+          Date de création
+          <span class="sort-emoji">
+            <mat-icon
+              style="
+                font-size: 16px; /* Adjust the size to your preference */
+                width: 16px; /* Optional: Adjust width */
+                height: 16px; /* Optional: Adjust height */
+                line-height: 16px; /* Align icon within its container */
+              "
+            >
+              {{ sortAscending ? "arrow_downward" : "arrow_upward" }}
+            </mat-icon>
+          </span>
+        </div>
+      </th>
       <td mat-cell *matCellDef="let element">
         {{ element.createdAt | date : "dd MMMM yyyy à HH:mm" }}
       </td>
