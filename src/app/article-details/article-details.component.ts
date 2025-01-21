@@ -153,7 +153,8 @@ export class ArticleDetailsComponent implements OnInit {
             this.topics = topics;
             this.topic_name = topics[0];
             this.toast.success(
-              'Sujets générés avec succès ! \n Vous pouvez maintenant choisir un sujet.'
+              'Sujets générés avec succès ! \n Vous pouvez maintenant choisir un sujet.',
+              { duration: 10000 }
             );
             console.log('Topics fetched:', this.topics);
             await lastValueFrom(

@@ -8,6 +8,7 @@
       <td mat-cell *matCellDef="let element">
         <div style="display: flex; align-items: center">
           <button
+            [matTooltip]="element.article_id"
             [matMenuTriggerFor]="menu"
             mat-icon-button
             style="background: transparent !important"

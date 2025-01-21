@@ -227,7 +227,10 @@
   @if(article!==undefined && article.additional_infos || article === undefined)
   {
   <div style="width: 100%">
-    <p>Informations supplémentaires et limites de l'article :</p>
+    <p>
+      Informations supplémentaires et limites de l'article
+      <span style="font-weight: bolder"> (optionnel)</span> :
+    </p>
     <mat-form-field
       style="width: 100%"
       [ngClass]="{ 'disabled-input': article !== undefined }"

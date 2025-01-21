@@ -207,7 +207,9 @@ export class ArticlesComponent implements OnChanges {
           message: 'Êtes-vous sûr de vouloir supprimer cet article ?',
           confirmLabel: 'Supprimer',
           cancelLabel: 'Annuler',
-          itemName: article.article_name!.split('.')[0],
+          itemName: article.article_name
+            ? article.article_name.split('.')[0]
+            : 'En cours de traitement',
         },
       })
       .afterClosed()
