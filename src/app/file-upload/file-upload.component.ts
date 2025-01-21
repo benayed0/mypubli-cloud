@@ -37,9 +37,7 @@ export class FileUploadComponent {
     private toast: HotToastService,
     private articleService: ArticleService,
     public dialog: MatDialog
-  ) {
-    this.openDialog('1fa9336a-f1c0-4d85-8af8-9d9ea634642a');
-  }
+  ) {}
   @ViewChild('ScientificFileInput')
   ScientificFileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('ReportFileInput') ReportFileInput!: ElementRef<HTMLInputElement>;
@@ -112,8 +110,6 @@ export class FileUploadComponent {
     } else {
       this.toast.error("Le format du fichier n'est pas autorisé");
     }
-
-    // Add your file processing logic here
   }
   clearReport(event?: Event) {
     this.report = undefined;
@@ -146,8 +142,6 @@ export class FileUploadComponent {
   }
 
   onScientificDocFileSelected(event: Event): void {
-    console.log('ScientificDocFileSelected');
-
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       Array.from(input.files).forEach((file) => {
@@ -157,21 +151,16 @@ export class FileUploadComponent {
   }
 
   handleFileScientificDoc(file: File): void {
-    console.log(file.type);
-
     if (this.scientificDocFileTypes.includes(file.type)) {
       this.scientific_docs?.push({ file, name: file.name });
     } else {
       this.toast.error("Le format du fichier n'est pas autorisé");
     }
-
-    // Add your file processing logic here
   }
   clearScientificDoc(event: Event, index: number) {
     if (index >= 0 && index < this.scientific_docs!.length) {
       this.scientific_docs!.splice(index, 1); // Remove the file from the files array
     }
-
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -179,7 +168,6 @@ export class FileUploadComponent {
   }
   clearAllScientificDocs(event?: Event) {
     this.scientific_docs = [];
-
     if (event) {
       event.preventDefault();
       event.stopPropagation();
@@ -187,8 +175,6 @@ export class FileUploadComponent {
   }
   sendFiles() {
     this.showErrors = true;
-    console.log(this.report);
-    console.log(this.scientific_docs);
 
     if (!this.report && this.scientific_docs.length === 0) {
       this.toast.error(
@@ -298,27 +284,29 @@ export class FileUploadComponent {
                 })
                 .afterClosed()
                 .subscribe((data) => {
-                  const {
-                    authors,
-                    fundings,
-                    acknowledgments,
-                    topic,
-                    topics,
-                    additional_infos,
-                  } = data;
-                  this.addFiles.emit({
-                    article_id,
-                    createdAt,
-                    report_name: this.reportName!,
-                    scientificDocs,
-                    state: STATE.WAITING_FOR_ARTICLE,
-                    authors,
-                    topics,
-                    topic,
-                    fundings,
-                    additional_infos,
-                    acknowledgments,
-                  });
+                  if (data) {
+                    const {
+                      authors,
+                      fundings,
+                      acknowledgments,
+                      topic,
+                      topics,
+                      additional_infos,
+                    } = data;
+                    this.addFiles.emit({
+                      article_id,
+                      createdAt,
+                      report_name: this.reportName!,
+                      scientificDocs,
+                      state: STATE.WAITING_FOR_ARTICLE,
+                      authors,
+                      topics,
+                      topic,
+                      fundings,
+                      additional_infos,
+                      acknowledgments,
+                    });
+                  }
                   this.clearReport();
                   this.clearAllScientificDocs();
                 });
@@ -327,5 +315,4 @@ export class FileUploadComponent {
         });
     }
   }
-  openDialog(article_id: string) {}
 }

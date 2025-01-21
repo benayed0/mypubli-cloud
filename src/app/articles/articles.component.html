@@ -1,4 +1,4 @@
-@if(articles.length>0){
+@if(articles.length>0 || (loaderService.isLoading$ | async)) {
 
 <div class="parent">
   <table mat-table [dataSource]="articles" class="mat-elevation-z8">

@@ -5,7 +5,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Article, STATE } from '../../articles/articles.component';
@@ -23,11 +23,18 @@ export interface uploadScientificDocFileUrlRequest {
   providedIn: 'root',
 })
 export class ArticleService {
-  constructor(
-    private httpClient: HttpClient,
-    private oauthservice: OAuthService
-  ) {}
+  constructor(private httpClient: HttpClient) {}
 
+  async checkUnfinishedArticle() {
+    if (localStorage.getItem('unsavedArticle')) {
+      await lastValueFrom(
+        this.deleteArticle(localStorage.getItem('unsavedArticle')!)
+      );
+      localStorage.removeItem('unsavedArticle');
+    } else {
+      console.log('No unsaved article');
+    }
+  }
   uploadFile(aws_url: string, file: File) {
     // Create a new HttpRequest with `reportProgress` enabled
     const req = new HttpRequest('PUT', aws_url, file, {
@@ -52,6 +59,17 @@ export class ArticleService {
             return 0;
         }
       })
+    );
+  }
+  getTopics(article_id: string) {
+    return this.httpClient.get<string[]>(
+      `${environment.PYTHON_URL}/get_topics/${article_id}`,
+      {
+        headers: {
+          'x-token': environment.PYTHON_SECRET,
+          'X-Skip-Loader': 'true',
+        },
+      }
     );
   }
   getOne(article_id: string) {

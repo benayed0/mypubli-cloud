@@ -23,7 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ArticleDetailsComponent } from '../article-details/article-details.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
+import { ConfirmDialogComponent } from './confirm-delete/confirm-dialog.component';
 
 export enum STATE {
   UPLOADING_FILES = 'UPLOADING_FILES',
@@ -72,6 +72,7 @@ export interface Article {
     FormsModule,
     NgxSkeletonLoaderModule,
     NgClass,
+    AsyncPipe,
   ],
   templateUrl: './articles.component.html',
   styleUrl: './articles.component.css',
@@ -200,8 +201,14 @@ export class ArticlesComponent implements OnChanges {
   }
   deleteArticle(article: Article) {
     this.dialog
-      .open(ConfirmDeleteComponent, {
-        data: { name: article.article_name },
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: "Suppression de l'article :",
+          message: 'Êtes-vous sûr de vouloir supprimer cet article ?',
+          confirmLabel: 'Supprimer',
+          cancelLabel: 'Annuler',
+          itemName: article.article_name!.split('.')[0],
+        },
       })
       .afterClosed()
       .subscribe((confirmed) => {

@@ -5,4 +5,6 @@ export const environment = {
   GOOGLE_CLIENT_SECRET: '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',
   API_URL:
     'https://p0bebn2b2g.execute-api.eu-west-3.amazonaws.com/dev/mypubli-cloud/',
+  PYTHON_URL: 'https://mypubli.click',
+  PYTHON_SECRET: '0307mce33fe491p^mda5ad0lde?Kdaeuf!',
 };

@@ -1,0 +1,17 @@
+<div class="dialog-container">
+  <h2 class="dialog-title">{{ data.title }}</h2>
+  @if(data.itemName){
+  <h2 class="dialog-title" style="font-size: medium; font-weight: 500">
+    {{ data.itemName }}
+  </h2>
+  }
+  <p class="dialog-message">{{ data.message }}</p>
+  <div class="dialog-actions">
+    <button class="cancel-button" (click)="cancel()">
+      {{ data.cancelLabel }}
+    </button>
+    <button class="delete-button" (click)="confirm()">
+      {{ data.confirmLabel }}
+    </button>
+  </div>
+</div>

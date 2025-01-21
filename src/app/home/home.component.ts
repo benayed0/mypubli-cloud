@@ -17,7 +17,9 @@ export class HomeComponent implements OnInit {
     this.articles = [...this.articles, article];
   }
   articles: Article[] = [];
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.articleService.checkUnfinishedArticle();
+
     this.getArticles();
   }
   getArticles() {

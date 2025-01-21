@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -20,6 +20,7 @@ import { interval, switchMap, Subject, takeUntil } from 'rxjs';
 import { Article, STATE } from '../articles/articles.component';
 import { NgClass } from '@angular/common';
 import { TopicInputComponent } from './topic-input/topic-input.component';
+import { ConfirmDialogComponent } from '../articles/confirm-delete/confirm-dialog.component';
 
 @Component({
   selector: 'app-article-details',
@@ -50,17 +51,44 @@ export class ArticleDetailsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: { article_id: string; article?: Article }
   ) {}
-  // @HostListener('window:beforeunload', ['$event'])
-  // unloadNotification(event: any) {
-  //   console.log('loaded');
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification(event: any) {
+    if (this.data.article === undefined) {
+      event.preventDefault();
+      localStorage.setItem('unsavedArticle', this.data.article_id);
+      event.returnValue = ''; // Some browsers require this to show the dialog
+      this.dialog
+        .open(ConfirmDialogComponent, {
+          data: {
+            title: 'Attention !',
+            message:
+              'Voulez-vous vraiment quitter la page ?\nToutes les données non sauvegardées seront perdues.',
+            confirmLabel: 'Oui',
+            cancelLabel: 'Non',
+          },
+        })
+        .afterClosed()
+        .subscribe((confirmed) => {
+          console.log(confirmed);
 
-  //   if (this.data.article === undefined) {
-  //     event.preventDefault();
-
-  //     (event as BeforeUnloadEvent).returnValue =
-  //       'You have unsaved changes. Are you sure you want to leave?';
-  //   }
-  // }
+          if (confirmed) {
+            this.articleService
+              .deleteArticle(this.data.article_id)
+              .subscribe(({ success }) => {
+                if (success) {
+                  this.dialogRef.close();
+                  this.toast.info(
+                    "Traitement de l'article annulé et données perdues."
+                  );
+                }
+              });
+          } else {
+            this.toast.info('Continuer de rensigner les informations');
+          }
+        });
+    }
+  }
+  unsavedArticle = localStorage.getItem('unsavedArticle');
   article = this.data.article ? this.data.article : undefined;
   topics: string[] = [];
   topic_name = '';
@@ -118,32 +146,22 @@ export class ArticleDetailsComponent implements OnInit {
 
   getTopics() {
     if (this.data.article_id !== undefined) {
-      console.log('Article ID:', this.data.article_id);
-      interval(5000) // Emit every 5 seconds
-        .pipe(
-          takeUntil(this.destroy$), // Continue while topics is empty
-          switchMap(() => this.articleService.getOne(this.data.article_id)) // Fetch topics
-        )
-        .subscribe({
-          next: ({ topics }) => {
-            if (topics.length > 0) {
-              this.topics = topics;
-              this.topic_name = topics[0];
-              this.toast.success(
-                'Sujets générés avec succès ! \n Vous pouvez maintenant choisir un sujet.'
-              );
-              console.log('Topics fetched:', this.topics);
-              this.destroy$.next();
-            }
-          },
-          error: (err) => {
-            console.error('Error fetching topics:', err);
-            this.toast.error('Failed to fetch topics. Please try again later.');
-          },
-          complete: () => {
-            console.log('Completed');
-          },
-        });
+      const { article_id } = this.data;
+      this.articleService.getTopics(article_id).subscribe({
+        next: (topics) => {
+          if (topics.length > 0) {
+            this.topics = topics;
+            this.topic_name = topics[0];
+            this.toast.success(
+              'Sujets générés avec succès ! \n Vous pouvez maintenant choisir un sujet.'
+            );
+            console.log('Topics fetched:', this.topics);
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
     }
   }
   checkTopic(event: Event) {
@@ -158,6 +176,8 @@ export class ArticleDetailsComponent implements OnInit {
           if (topic !== undefined && topic !== '') {
             this.topics.push(topic);
             this.topic_name = topic;
+          } else {
+            this.topic_name = this.topics[0];
           }
         });
     }
