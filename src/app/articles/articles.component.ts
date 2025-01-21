@@ -125,7 +125,8 @@ export class ArticlesComponent implements OnChanges {
         .getOne(article.article_id)
         .subscribe(({ state, article_name, finishedAt, topic }) => {
           if (state === 'ARTICLE_READY') {
-            console.log(article_index);
+            this.sortAscending = true;
+            this.sortData('createdAt');
             this.highlightedRow = article.article_id;
             this.articles[article_index].state = state;
             this.articles[article_index].article_name = article_name;
